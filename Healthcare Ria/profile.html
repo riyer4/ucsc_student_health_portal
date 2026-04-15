@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — UCSC Student Health</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .profile-page-hero {
+      background: linear-gradient(135deg, var(--blue-900), var(--blue-800));
+      border-radius: var(--radius-xl);
+      padding: 32px 36px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 28px;
+    }
+    .profile-page-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--gold-500);
+      border: 3px solid var(--gold-400);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.75rem; font-weight: 800; color: var(--blue-900);
+      flex-shrink: 0;
+    }
+    .profile-page-hero h1 { color: var(--white); font-size: 1.5rem; margin-bottom: 4px; }
+    .profile-page-hero p  { color: rgba(255,255,255,0.65); font-size: 0.9rem; }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .info-field { }
+    .info-field__label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-500); margin-bottom: 3px; }
+    .info-field__value { font-size: 0.9375rem; font-weight: 500; color: var(--gray-900); }
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0; border-bottom: 1px solid var(--gray-100);
+    }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-label { font-size: 0.875rem; font-weight: 500; color: var(--gray-900); }
+    .toggle-sub   { font-size: 0.75rem; color: var(--gray-500); margin-top: 2px; }
+    .toggle-pill {
+      width: 44px; height: 24px; border-radius: 99px;
+      background: var(--blue-800); position: relative; cursor: pointer; flex-shrink: 0;
+    }
+    .toggle-pill::after {
+      content: ''; position: absolute; top: 3px; right: 3px;
+      width: 18px; height: 18px; border-radius: 50%; background: var(--white);
+    }
+    .toggle-pill.off { background: var(--gray-200); }
+    .toggle-pill.off::after { left: 3px; right: auto; }
+  </style>
+</head>
+<body>
+  <nav class="topnav">
+    <div class="topnav__brand">
+      <div class="topnav__logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <div><span class="topnav__title">Student Health</span><span class="topnav__sub">UC Santa Cruz</span></div>
+    </div>
+    <div class="topnav__links">
+      <a class="topnav__link" href="index.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a class="topnav__link" href="appointments.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Appointments</a>
+      <a class="topnav__link" href="results.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Test Results</a>
+      <a class="topnav__link" href="messages.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Messages</a>
+      <a class="topnav__link" href="billing.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Billing
+      </a>
+    </div>
+    <div class="topnav__right">
+      <a class="topnav__mobile-btn" href="mobile/index.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Mobile View
+      </a>
+      <div class="topnav__notif">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="topnav__profile" id="topnavProfile">
+        <div class="topnav__avatar" onclick="toggleProfileMenu()" id="profileAvatar">RS</div>
+        <div class="profile-menu" id="profileMenu">
+          <div class="profile-menu__user">
+            <div class="profile-menu__avatar-lg">RS</div>
+            <div><div class="profile-menu__name">Ria Singh</div><div class="profile-menu__email">rsingh@ucsc.edu</div></div>
+          </div>
+          <div class="profile-menu__divider"></div>
+          <a class="profile-menu__item" href="profile.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>My Profile</a>
+          <a class="profile-menu__item" href="insurance.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>Insurance</a>
+          <a class="profile-menu__item" href="records.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>Medical Records</a>
+          <a class="profile-menu__item" href="messages.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>Messages<span class="profile-menu__badge">2</span></a>
+          <a class="profile-menu__item" href="billing.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>Billing</a>
+          <a class="profile-menu__item" href="forms.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>Forms<span class="profile-menu__badge" style="background:var(--orange-500)">1</span></a>
+          <div class="profile-menu__divider"></div>
+          <a class="profile-menu__item profile-menu__item--out" href="#"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <main class="page-content" style="max-width:860px">
+
+      <!-- Hero -->
+      <div class="profile-page-hero">
+        <div class="profile-page-avatar">RS</div>
+        <div style="flex:1">
+          <h1>Ria Singh</h1>
+          <p>Undergraduate · Porter College · 3rd Year</p>
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+            <span class="badge badge-green">Active Student</span>
+            <span class="badge badge-blue">UC SHIP Enrolled</span>
+          </div>
+        </div>
+        <a href="#" class="btn btn-outline" style="color:rgba(255,255,255,0.85);border-color:rgba(255,255,255,0.3);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Edit Profile
+        </a>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:24px;">
+        <div style="display:flex;flex-direction:column;gap:24px;">
+
+          <!-- Personal Information -->
+          <div class="card card-pad">
+            <div class="card-header">
+              <span class="card-title">Personal Information</span>
+              <a href="#" class="btn btn-sm btn-ghost">Edit</a>
+            </div>
+            <div class="info-grid">
+              <div class="info-field"><div class="info-field__label">Full Name</div><div class="info-field__value">Ria Priya Singh</div></div>
+              <div class="info-field"><div class="info-field__label">Preferred Name</div><div class="info-field__value">Ria</div></div>
+              <div class="info-field"><div class="info-field__label">Date of Birth</div><div class="info-field__value">March 14, 2003</div></div>
+              <div class="info-field"><div class="info-field__label">Pronouns</div><div class="info-field__value">She / Her</div></div>
+              <div class="info-field"><div class="info-field__label">UCSC Email</div><div class="info-field__value">rsingh@ucsc.edu</div></div>
+              <div class="info-field"><div class="info-field__label">Personal Email</div><div class="info-field__value">ria.singh03@gmail.com</div></div>
+              <div class="info-field"><div class="info-field__label">Phone</div><div class="info-field__value">(415) 555-0192</div></div>
+              <div class="info-field"><div class="info-field__label">Blood Type</div><div class="info-field__value">O+</div></div>
+              <div class="info-field" style="grid-column:1/-1"><div class="info-field__label">Mailing Address</div><div class="info-field__value">1156 High Street, Porter College Room 214, Santa Cruz, CA 95064</div></div>
+            </div>
+          </div>
+
+          <!-- Emergency Contact -->
+          <div class="card card-pad">
+            <div class="card-header">
+              <span class="card-title">Emergency Contact</span>
+              <a href="#" class="btn btn-sm btn-ghost">Edit</a>
+            </div>
+            <div class="info-grid">
+              <div class="info-field"><div class="info-field__label">Name</div><div class="info-field__value">Anita Singh</div></div>
+              <div class="info-field"><div class="info-field__label">Relationship</div><div class="info-field__value">Mother</div></div>
+              <div class="info-field"><div class="info-field__label">Phone</div><div class="info-field__value">(415) 555-0178</div></div>
+              <div class="info-field"><div class="info-field__label">Email</div><div class="info-field__value">anita.singh@gmail.com</div></div>
+            </div>
+          </div>
+
+          <!-- Health Preferences -->
+          <div class="card card-pad">
+            <div class="card-header">
+              <span class="card-title">Health Preferences</span>
+              <a href="#" class="btn btn-sm btn-ghost">Edit</a>
+            </div>
+            <div class="info-grid">
+              <div class="info-field"><div class="info-field__label">Primary Care Provider</div><div class="info-field__value">Dr. Sarah Kim</div></div>
+              <div class="info-field"><div class="info-field__label">Preferred Pharmacy</div><div class="info-field__value">Campus Pharmacy, SHC</div></div>
+              <div class="info-field"><div class="info-field__label">Known Allergies</div><div class="info-field__value">Penicillin (rash)</div></div>
+              <div class="info-field"><div class="info-field__label">Chronic Conditions</div><div class="info-field__value">None reported</div></div>
+              <div class="info-field"><div class="info-field__label">Current Medications</div><div class="info-field__value">Vitamin D3 2,000 IU (daily)</div></div>
+              <div class="info-field"><div class="info-field__label">Past Surgeries</div><div class="info-field__value">None</div></div>
+            </div>
+          </div>
+
+          <!-- Notification Settings -->
+          <div class="card card-pad">
+            <div class="card-header">
+              <span class="card-title">Notification Preferences</span>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Appointment Reminders</div><div class="toggle-sub">24-hour and 1-hour reminders via email</div></div>
+              <div class="toggle-pill"></div>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">New Test Results</div><div class="toggle-sub">Email alert when lab results are available</div></div>
+              <div class="toggle-pill"></div>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Provider Messages</div><div class="toggle-sub">Email notification for new messages</div></div>
+              <div class="toggle-pill"></div>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Billing Alerts</div><div class="toggle-sub">Notify when a new charge is posted</div></div>
+              <div class="toggle-pill off"></div>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Health Announcements</div><div class="toggle-sub">Campus health news and updates</div></div>
+              <div class="toggle-pill off"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right sidebar -->
+        <div style="display:flex;flex-direction:column;gap:24px;">
+
+          <!-- Academic Info -->
+          <div class="card card-pad">
+            <div class="card-header"><span class="card-title">Academic Info</span></div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
+              <div class="info-field"><div class="info-field__label">Student ID</div><div class="info-field__value">1842937</div></div>
+              <div class="info-field"><div class="info-field__label">College</div><div class="info-field__value">Porter College</div></div>
+              <div class="info-field"><div class="info-field__label">Major</div><div class="info-field__value">Cognitive Science, B.S.</div></div>
+              <div class="info-field"><div class="info-field__label">Year</div><div class="info-field__value">3rd Year (Junior)</div></div>
+              <div class="info-field"><div class="info-field__label">Faculty Advisor</div><div class="info-field__value">Prof. James Liu</div></div>
+              <div class="info-field"><div class="info-field__label">Enrollment Status</div><div class="info-field__value"><span class="badge badge-green">Full-time</span></div></div>
+            </div>
+          </div>
+
+          <!-- Account Actions -->
+          <div class="card card-pad">
+            <div class="card-header"><span class="card-title">Account</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+              <a href="#" class="btn btn-outline" style="width:100%;justify-content:flex-start;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Change Password
+              </a>
+              <a href="records.html" class="btn btn-ghost" style="width:100%;justify-content:flex-start;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Download My Records
+              </a>
+              <a href="forms.html" class="btn btn-ghost" style="width:100%;justify-content:flex-start;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                Pending Forms <span class="badge badge-orange" style="margin-left:6px">1</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Quick links -->
+          <div class="card card-pad">
+            <div class="card-header"><span class="card-title">Quick Links</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px;margin-top:4px;">
+              <a href="insurance.html" class="result-item" style="padding:10px 0;border-bottom:1px solid var(--gray-100);">
+                <span style="font-size:0.875rem;font-weight:500;color:var(--gray-900)">My Insurance Card</span>
+                <svg class="result-item__arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </a>
+              <a href="messages.html" class="result-item" style="padding:10px 0;border-bottom:1px solid var(--gray-100);">
+                <span style="font-size:0.875rem;font-weight:500;color:var(--gray-900)">Messages</span>
+                <span class="badge badge-blue" style="margin-left:auto;margin-right:8px">2 new</span>
+                <svg class="result-item__arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </a>
+              <a href="billing.html" class="result-item" style="padding:10px 0;">
+                <span style="font-size:0.875rem;font-weight:500;color:var(--gray-900)">Billing &amp; Payments</span>
+                <svg class="result-item__arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+    <footer class="footer">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <div style="width:28px;height:28px;background:var(--gold-500);border-radius:7px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-900)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <span class="footer__brand-name">UCSC Student Health</span>
+        </div>
+        <div class="footer__links"><a href="#">Privacy Policy</a><a href="#">Accessibility</a><a href="#">Contact Us</a><a href="#">Help</a></div>
+        <span class="footer__copy">© 2025 UC Santa Cruz · Student Health Center</span>
+      </div>
+    </footer>
+  </div>
+  <script src="js/main.js"></script>
+</body>
+</html>

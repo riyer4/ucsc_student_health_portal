@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Notifications — UCSC Student Health</title>
+  <link rel="stylesheet" href="css/mobile.css" />
+  <style>
+    .notif-page-header {
+      position: fixed;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 430px;
+      height: var(--header-h);
+      background: var(--blue-800);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 10px;
+      z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .notif-back-btn {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      border: none; color: white; cursor: pointer;
+      flex-shrink: 0;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .notif-page-title {
+      flex: 1;
+      font-size: 1rem; font-weight: 700; color: var(--white);
+    }
+    .notif-mark-all-btn {
+      font-size: 0.775rem; font-weight: 600;
+      color: var(--gold-500);
+      background: none; border: none;
+      cursor: pointer; font-family: var(--font);
+      padding: 6px 0;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .notif-mark-all-btn:active { opacity: 0.7; }
+
+    /* ── Notification items ──────────────────────── */
+    .notif-list { background: var(--white); }
+
+    .notif-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--gray-100);
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background var(--t);
+      position: relative;
+    }
+    .notif-row:last-child { border-bottom: none; }
+    .notif-row:active { background: var(--gray-50); }
+    .notif-row.unread { background: var(--blue-50); }
+    .notif-row.unread:active { background: #dbeeff; }
+
+    .notif-row__icon {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .notif-row__body { flex: 1; min-width: 0; }
+    .notif-row__title {
+      font-size: 0.875rem; font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 3px;
+    }
+    .notif-row__text {
+      font-size: 0.8rem; color: var(--gray-500);
+      line-height: 1.45;
+    }
+    .notif-row__time {
+      font-size: 0.7rem; color: var(--gray-400);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+    .notif-row__dot {
+      width: 8px; height: 8px;
+      background: var(--blue-600);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .notif-empty {
+      padding: 56px 24px;
+      text-align: center;
+      color: var(--gray-400);
+    }
+    .notif-empty svg { margin: 0 auto 12px; opacity: 0.35; }
+    .notif-empty p { font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══════════════════════════════════════════ -->
+  <header class="notif-page-header">
+    <a class="notif-back-btn" onclick="history.back()" href="javascript:void(0)" aria-label="Go back">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </a>
+    <div class="notif-page-title">Notifications</div>
+    <button class="notif-mark-all-btn" id="markAllBtn" onclick="markAll()">Mark all read</button>
+  </header>
+
+  <!-- ═══ SCREEN ════════════════════════════════════════════ -->
+  <main class="m-screen">
+    <div class="notif-list" id="notifList"></div>
+  </main>
+
+  <!-- ═══ BOTTOM NAV ════════════════════════════════════════ -->
+  <nav class="m-bottom-nav">
+    <a class="m-nav-tab" href="index.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      Home
+    </a>
+    <a class="m-nav-tab" href="appointments.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      Appts
+    </a>
+    <a class="m-nav-tab" href="results.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      Results
+    </a>
+    <a class="m-nav-tab" href="messages.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      Messages
+    </a>
+    <a class="m-nav-tab" href="billing.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+        <line x1="1" y1="10" x2="23" y2="10"/>
+      </svg>
+      Billing
+    </a>
+  </nav>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Notification links resolve relative to the mobile/ folder
+    const NOTIF_HREFS = {
+      'messages.html':    'messages.html',
+      'appointments.html':'appointments.html',
+      'results.html':     'results.html',
+      'billing.html':     'billing.html',
+      'forms.html':       'forms.html',
+    };
+
+    function render() {
+      const read = getReadNotifs();
+      const allRead = NOTIFICATIONS.every(n => read.includes(n.id));
+      document.getElementById('markAllBtn').style.display = allRead ? 'none' : '';
+
+      const list = document.getElementById('notifList');
+      if (!NOTIFICATIONS.length) {
+        list.innerHTML = `<div class="notif-empty">
+          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <p>No notifications</p>
+        </div>`;
+        return;
+      }
+
+      list.innerHTML = NOTIFICATIONS.map(n => {
+        const isUnread = !read.includes(n.id);
+        const href = NOTIF_HREFS[n.href] || n.href;
+        return `<div class="notif-row ${isUnread ? 'unread' : ''}"
+            onclick="readAndGo('${n.id}', '${href}')">
+          <div class="notif-row__icon" style="background:${n.iconBg}">${n.icon}</div>
+          <div class="notif-row__body">
+            <div class="notif-row__title">${n.title}</div>
+            <div class="notif-row__text">${n.text}</div>
+            <div class="notif-row__time">${n.time}</div>
+          </div>
+          ${isUnread ? '<div class="notif-row__dot"></div>' : ''}
+        </div>`;
+      }).join('');
+    }
+
+    function readAndGo(id, href) {
+      saveReadNotif(id);
+      window.location.href = href;
+    }
+
+    function markAll() {
+      NOTIFICATIONS.forEach(n => saveReadNotif(n.id));
+      render();
+    }
+
+    render();
+  </script>
+  <script src="js/mobile.js"></script>
+</body>
+</html>

@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messages — UCSC Student Health</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Layout ─────────────────────────────── */
+    .messages-layout {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* ── Thread list panel ──────────────────── */
+    .thread-panel { overflow: hidden; display: flex; flex-direction: column; min-height: 520px; }
+
+    .thread-search {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .thread-search input {
+      width: 100%; padding: 8px 12px;
+      border: 1.5px solid var(--gray-200); border-radius: 99px;
+      font-family: var(--font); font-size: 0.8125rem; color: var(--gray-900);
+      outline: none; transition: border-color 0.15s; background: var(--gray-50);
+    }
+    .thread-search input:focus { border-color: var(--blue-700); background: var(--white); }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .tab-btn {
+      padding: 12px 16px; font-size: 0.875rem; font-weight: 500;
+      color: var(--gray-500); border: none; background: none; cursor: pointer;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s; font-family: var(--font);
+    }
+    .tab-btn:hover { color: var(--gray-900); }
+    .tab-btn.active { color: var(--blue-800); border-bottom-color: var(--blue-800); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    .thread-list { flex: 1; overflow-y: auto; }
+
+    .thread-item {
+      display: flex; gap: 12px; padding: 14px 16px;
+      border-bottom: 1px solid var(--gray-100); cursor: pointer;
+      transition: background 0.13s; position: relative;
+    }
+    .thread-item:last-child { border-bottom: none; }
+    .thread-item:hover { background: var(--gray-50); }
+    .thread-item.active { background: var(--blue-50); }
+    .thread-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; flex-shrink: 0; color: var(--white);
+    }
+    .av-blue   { background: var(--blue-700); }
+    .av-green  { background: var(--green-500); }
+    .av-purple { background: #7c3aed; }
+    .av-gold   { background: var(--gold-500); color: var(--blue-900); }
+    .av-teal   { background: #0d9488; }
+    .av-rose   { background: #e11d48; }
+
+    .thread-body { flex: 1; min-width: 0; }
+    .thread-top {
+      display: flex; justify-content: space-between;
+      align-items: baseline; margin-bottom: 2px;
+    }
+    .thread-sender { font-size: 0.875rem; font-weight: 600; color: var(--gray-900); }
+    .thread-time { font-size: 0.725rem; color: var(--gray-500); flex-shrink: 0; }
+    .thread-subject {
+      font-size: 0.8rem; font-weight: 500; color: var(--gray-700);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .thread-preview {
+      font-size: 0.775rem; color: var(--gray-500);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;
+    }
+    .unread-dot {
+      position: absolute; top: 50%; right: 14px; transform: translateY(-50%);
+      width: 8px; height: 8px; border-radius: 50%; background: var(--blue-700);
+    }
+    .thread-item.unread .thread-sender { color: var(--blue-800); font-weight: 700; }
+    .thread-item.unread .thread-subject { font-weight: 600; color: var(--gray-900); }
+
+    /* ── Message view panel ─────────────────── */
+    .msg-panel { overflow: hidden; display: flex; flex-direction: column; min-height: 520px; }
+
+    .msg-panel-empty {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px; color: var(--gray-400); padding: 40px;
+    }
+    .msg-panel-empty svg { opacity: 0.3; }
+    .msg-panel-empty p { font-size: 0.9rem; }
+
+    .msg-view-header {
+      padding: 18px 24px 14px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    }
+    .msg-view-subject { font-size: 1.05rem; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+    .msg-view-meta { font-size: 0.8rem; color: var(--gray-500); }
+    .msg-view-meta strong { color: var(--gray-900); }
+
+    .msg-conversation {
+      flex: 1; overflow-y: auto;
+      padding: 20px 24px; display: flex; flex-direction: column; gap: 20px;
+    }
+
+    .msg-entry { display: flex; gap: 12px; align-items: flex-start; }
+    .msg-entry.mine { flex-direction: row-reverse; }
+
+    .msg-bubble-wrap { display: flex; flex-direction: column; gap: 4px; max-width: 82%; }
+    .msg-entry.mine .msg-bubble-wrap { align-items: flex-end; }
+    .msg-entry:not(.mine) .msg-bubble-wrap { align-items: flex-start; }
+
+    .msg-sender-row {
+      display: flex; align-items: baseline; gap: 8px;
+      font-size: 0.775rem; color: var(--gray-500);
+    }
+    .msg-entry.mine .msg-sender-row { flex-direction: row-reverse; }
+    .msg-sender-name { font-weight: 600; color: var(--gray-800); font-size: 0.8125rem; }
+
+    .msg-bubble {
+      background: var(--gray-50); border: 1px solid var(--gray-100);
+      border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+      padding: 14px 16px; font-size: 0.875rem; line-height: 1.65; color: var(--gray-700);
+      word-break: break-word;
+    }
+    .msg-entry.mine .msg-bubble {
+      background: #E5E7EB; border-color: #D1D5DB;
+      color: var(--gray-900); font-weight: 500;
+      border-radius: var(--radius-lg) 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    /* File chips inside desktop bubble */
+    .msg-bubble-files { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
+    .msg-bubble-file-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(0,0,0,0.06); border-radius: 6px;
+      padding: 5px 10px; font-size: 0.775rem; color: inherit; font-weight: 500;
+      max-width: 260px;
+    }
+    .msg-bubble-file-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .msg-bubble p { margin-bottom: 10px; }
+    .msg-bubble p:last-child { margin-bottom: 0; }
+    .msg-bubble .sig { opacity: 0.7; font-size: 0.8125rem; }
+
+    .msg-reply-area { padding: 14px 20px 18px; border-top: 1px solid var(--gray-100); }
+    .msg-reply-label {
+      font-size: 0.75rem; font-weight: 600; color: var(--gray-500);
+      margin-bottom: 8px; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .msg-reply-area textarea {
+      width: 100%; min-height: 88px; padding: 11px 13px;
+      border: 1.5px solid var(--gray-200); border-radius: var(--radius-md);
+      font-family: var(--font); font-size: 0.875rem; color: var(--gray-900);
+      resize: vertical; outline: none; transition: border-color 0.15s;
+      background: var(--gray-50); box-sizing: border-box;
+    }
+    .msg-reply-area textarea:focus { border-color: var(--blue-700); background: var(--white); }
+    .msg-reply-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 10px; }
+    .msg-reply-actions-right { display: flex; align-items: center; gap: 10px; }
+
+    /* ── Attachment styles ──────────────────────── */
+    .attach-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 10px;
+      border: 1.5px solid var(--gray-200); border-radius: var(--radius-md);
+      background: none; cursor: pointer; font-family: var(--font);
+      font-size: 0.8rem; color: var(--gray-500);
+      transition: border-color 0.13s, color 0.13s, background 0.13s;
+    }
+    .attach-btn:hover { border-color: var(--blue-600); color: var(--blue-700); background: var(--blue-50); }
+    .attach-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .attach-list:empty { display: none; }
+    .attach-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--blue-50); border: 1px solid var(--blue-100);
+      border-radius: 20px; padding: 3px 8px 3px 7px;
+      font-size: 0.775rem; color: var(--blue-800); font-weight: 500;
+      max-width: 220px;
+    }
+    .attach-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .attach-chip button {
+      width: 15px; height: 15px; border-radius: 50%;
+      background: var(--blue-200); border: none; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; color: var(--blue-800); flex-shrink: 0; line-height: 1;
+      transition: background 0.13s;
+    }
+    .attach-chip button:hover { background: var(--blue-700); color: white; }
+    .compose-attach-row { margin-top: 4px; }
+    .compose-attach-dashed {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 12px;
+      border: 1.5px dashed var(--gray-300); border-radius: var(--radius-md);
+      background: none; cursor: pointer; font-family: var(--font);
+      font-size: 0.825rem; color: var(--gray-500); width: 100%;
+      transition: border-color 0.13s, color 0.13s;
+    }
+    .compose-attach-dashed:hover { border-color: var(--blue-600); color: var(--blue-700); }
+    .send-success {
+      display: none; font-size: 0.8125rem; color: var(--green-600);
+      align-items: center; gap: 5px; animation: fadeIn 0.2s ease;
+    }
+    .send-success.show { display: flex; }
+
+    /* ── Compose Modal ──────────────────────── */
+    .compose-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 500; opacity: 0; pointer-events: none;
+      transition: opacity 0.18s ease;
+    }
+    .compose-modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .compose-modal {
+      background: var(--white); border-radius: var(--radius-lg);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      width: 560px; max-width: 95vw;
+      transform: translateY(12px) scale(0.98);
+      transition: transform 0.18s ease;
+    }
+    .compose-modal-overlay.open .compose-modal { transform: translateY(0) scale(1); }
+
+    .compose-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px; border-bottom: 1px solid var(--gray-100);
+    }
+    .compose-header h3 { font-size: 1rem; font-weight: 700; color: var(--gray-900); }
+    .compose-close {
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; border: none; background: none; cursor: pointer;
+      color: var(--gray-500); font-size: 1.1rem; transition: background 0.13s;
+    }
+    .compose-close:hover { background: var(--gray-100); }
+
+    .compose-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; }
+
+    .compose-field { display: flex; flex-direction: column; gap: 5px; }
+    .compose-field label { font-size: 0.8rem; font-weight: 600; color: var(--gray-600); }
+    .compose-field select,
+    .compose-field input,
+    .compose-field textarea {
+      padding: 10px 12px; border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-md); font-family: var(--font);
+      font-size: 0.875rem; color: var(--gray-900); outline: none;
+      transition: border-color 0.15s; background: var(--gray-50);
+    }
+    .compose-field select:focus,
+    .compose-field input:focus,
+    .compose-field textarea:focus { border-color: var(--blue-700); background: var(--white); }
+    .compose-field textarea { min-height: 120px; resize: vertical; }
+
+    .compose-footer {
+      display: flex; justify-content: flex-end; gap: 10px;
+      padding: 14px 22px 20px;
+    }
+
+    /* ── Empty sent state ───────────────────── */
+    .empty-state {
+      padding: 40px 20px; text-align: center;
+      color: var(--gray-400); font-size: 0.875rem;
+    }
+
+    /* ── Unread badge in tab ─────────────────── */
+    .tab-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 18px; height: 18px; padding: 0 5px;
+      background: var(--blue-700); color: #fff;
+      border-radius: 99px; font-size: 0.65rem; font-weight: 700;
+      margin-left: 5px; vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== TOP NAV ===== -->
+  <nav class="topnav">
+    <div class="topnav__brand">
+      <div class="topnav__logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <div>
+        <span class="topnav__title">Student Health</span>
+        <span class="topnav__sub">UC Santa Cruz</span>
+      </div>
+    </div>
+    <div class="topnav__links">
+      <a class="topnav__link" href="index.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a class="topnav__link" href="appointments.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Appointments
+      </a>
+      <a class="topnav__link" href="results.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Test Results
+      </a>
+      <a class="topnav__link active" href="messages.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+      </a>
+      <a class="topnav__link" href="billing.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Billing
+      </a>
+    </div>
+    <div class="topnav__right">
+      <a class="topnav__mobile-btn" href="mobile/index.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Mobile View
+      </a>
+      <div class="topnav__notif">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="topnav__profile" id="topnavProfile">
+        <div class="topnav__avatar" onclick="toggleProfileMenu()" id="profileAvatar">RS</div>
+        <div class="profile-menu" id="profileMenu">
+          <div class="profile-menu__user">
+            <div class="profile-menu__avatar-lg">RS</div>
+            <div><div class="profile-menu__name">Ria Singh</div><div class="profile-menu__email">rsingh@ucsc.edu</div></div>
+          </div>
+          <div class="profile-menu__divider"></div>
+          <a class="profile-menu__item" href="profile.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>My Profile</a>
+          <a class="profile-menu__item" href="insurance.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>Insurance</a>
+          <a class="profile-menu__item" href="records.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>Medical Records</a>
+          <a class="profile-menu__item" href="messages.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>Messages<span class="profile-menu__badge" id="profileMsgBadge">2</span></a>
+          <a class="profile-menu__item" href="billing.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>Billing</a>
+          <a class="profile-menu__item" href="forms.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>Forms<span class="profile-menu__badge" style="background:var(--orange-500)">1</span></a>
+          <div class="profile-menu__divider"></div>
+          <a class="profile-menu__item profile-menu__item--out" href="#"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE ===== -->
+  <div class="page-wrapper">
+    <main class="page-content">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h2>Messages</h2>
+        <button class="btn btn-gold" onclick="openCompose()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Compose
+        </button>
+      </div>
+
+      <div class="messages-layout">
+
+        <!-- ── Left: Thread list ── -->
+        <div class="card thread-panel">
+          <div class="thread-search">
+            <input type="search" id="threadSearch" placeholder="Search messages…" oninput="filterThreads(this.value)" />
+          </div>
+          <div class="tabs">
+            <button class="tab-btn active" id="inboxTabBtn" onclick="switchMsgTab('inbox',this)">
+              Inbox <span class="tab-badge" id="inboxBadge">2</span>
+            </button>
+            <button class="tab-btn" id="sentTabBtn" onclick="switchMsgTab('sent',this)">Sent</button>
+          </div>
+          <div class="thread-list" id="threadList"></div>
+        </div>
+
+        <!-- ── Right: Message view ── -->
+        <div class="card msg-panel" id="msgPanel">
+          <div class="msg-panel-empty" id="emptyState">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <p>Select a conversation to read</p>
+          </div>
+          <div id="msgView" style="display:none;flex-direction:column;flex:1;">
+            <div class="msg-view-header">
+              <div>
+                <div class="msg-view-subject" id="viewSubject"></div>
+                <div class="msg-view-meta" id="viewMeta"></div>
+              </div>
+            </div>
+            <div class="msg-conversation" id="msgConversation"></div>
+            <div class="msg-reply-area" id="msgReplyArea">
+              <div class="msg-reply-label">Reply</div>
+              <textarea id="replyText" placeholder="Write your message…"></textarea>
+              <div id="reply-attach-list" class="attach-list"></div>
+              <input type="file" id="reply-file-input" multiple style="display:none" onchange="handleReplyAttach(this)">
+              <div class="msg-reply-actions">
+                <button class="attach-btn" onclick="document.getElementById('reply-file-input').click()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                  </svg>
+                  Attach
+                </button>
+                <div class="msg-reply-actions-right">
+                  <span class="send-success" id="sendSuccess">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Sent!
+                  </span>
+                  <button class="btn btn-ghost" onclick="discardReply()">Discard</button>
+                  <button class="btn btn-primary" onclick="sendReply()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    Send Reply
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <div style="width:28px;height:28px;background:var(--gold-500);border-radius:7px;display:flex;align-items:center;justify-content:center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-900)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <span class="footer__brand-name">UCSC Student Health</span>
+        </div>
+        <div class="footer__links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Accessibility</a>
+          <a href="#">Contact Us</a>
+          <a href="#">Help</a>
+        </div>
+        <span class="footer__copy">&copy; 2025 UC Santa Cruz &middot; Student Health Center</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ===== COMPOSE MODAL ===== -->
+  <div class="compose-modal-overlay" id="composeOverlay" onclick="handleOverlayClick(event)">
+    <div class="compose-modal">
+      <div class="compose-header">
+        <h3>New Message</h3>
+        <button class="compose-close" onclick="closeCompose()" title="Close">&times;</button>
+      </div>
+      <div class="compose-body">
+        <div class="compose-field">
+          <label for="composeTo">To</label>
+          <select id="composeTo">
+            <option value="">— Select recipient —</option>
+            <option value="Dr. Sarah Kim">Dr. Sarah Kim — Primary Care</option>
+            <option value="Dr. Marcus Webb">Dr. Marcus Webb — Counseling &amp; Psych Services</option>
+            <option value="Dr. Priya Nair">Dr. Priya Nair — OB-GYN &amp; Women's Health</option>
+            <option value="Dr. James Okafor">Dr. James Okafor — Sports Medicine</option>
+            <option value="Campus Pharmacy">Campus Pharmacy</option>
+            <option value="Appointments">Appointments Office</option>
+            <option value="Billing Office">Billing Office</option>
+            <option value="Student Health Center">Student Health Center (General)</option>
+          </select>
+        </div>
+        <div class="compose-field">
+          <label for="composeSubject">Subject</label>
+          <input type="text" id="composeSubject" placeholder="Enter subject…" />
+        </div>
+        <div class="compose-field">
+          <label for="composeBody">Message</label>
+          <textarea id="composeBody" placeholder="Write your message…"></textarea>
+        </div>
+        <div class="compose-field compose-attach-row">
+          <label>Attachments</label>
+          <input type="file" id="compose-file-input" multiple style="display:none" onchange="handleComposeAttach(this)">
+          <div id="compose-attach-list" class="attach-list" style="margin-bottom:6px"></div>
+          <button type="button" class="compose-attach-dashed" onclick="document.getElementById('compose-file-input').click()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+            </svg>
+            Click to attach files
+          </button>
+        </div>
+      </div>
+      <div class="compose-footer">
+        <button class="btn btn-ghost" onclick="closeCompose()">Cancel</button>
+        <button class="btn btn-primary" onclick="sendCompose()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Send Message
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+  /* ============================================================
+     MESSAGES — Interactive logic
+  ============================================================ */
+
+  // ── Contact directory ─────────────────────────────────────
+  const CONTACTS = {
+    'Dr. Sarah Kim':        { initials: 'SK', av: 'av-blue',   role: 'Primary Care Physician' },
+    'Dr. Marcus Webb':      { initials: 'MW', av: 'av-purple', role: 'Counseling & Psych Services' },
+    'Dr. Priya Nair':       { initials: 'PN', av: 'av-teal',   role: 'OB-GYN & Women\'s Health' },
+    'Dr. James Okafor':     { initials: 'JO', av: 'av-rose',   role: 'Sports Medicine' },
+    'Campus Pharmacy':      { initials: 'Rx', av: 'av-green',  role: 'SHC Pharmacy' },
+    'Appointments':         { initials: 'A',  av: 'av-gold',   role: 'Appointments Office' },
+    'Billing Office':       { initials: 'B',  av: 'av-gold',   role: 'Student Health Billing' },
+    'Student Health Center':{ initials: 'SH', av: 'av-blue',   role: 'General Inquiries' },
+  };
+
+  // ── Thread data ───────────────────────────────────────────
+  // Each thread: { id, from, subject, preview, time, unread, sent, messages[] }
+  // Each message: { from, time, body (html string) }
+  let threads = [
+    {
+      id: 't1', from: 'Dr. Sarah Kim', unread: true, sent: false,
+      subject: 'Vitamin D Results & Next Steps',
+      preview: 'Your recent Vitamin D level came back low (18 ng/mL). I\'ve already sent…',
+      time: 'Apr 8',
+      messages: [
+        {
+          from: 'Dr. Sarah Kim', time: 'Apr 8, 2025 at 10:22 AM',
+          body: `<p>Hi Ria,</p>
+<p>Your recent Vitamin D panel came back with a level of 18 ng/mL, which is below the optimal range of 30–100 ng/mL. This is quite common, especially for students who spend a lot of time indoors.</p>
+<p>I've already sent a prescription for Vitamin D3 2,000 IU to the campus pharmacy — you can pick it up any time this week. Please take one capsule daily with a meal that contains some fat for best absorption.</p>
+<p>We'll recheck your levels in about 3 months. Let me know if you have any questions!</p>
+<p class="sig">— Dr. Sarah Kim</p>`
+        }
+      ]
+    },
+    {
+      id: 't2', from: 'Campus Pharmacy', unread: true, sent: false,
+      subject: 'Prescription Ready for Pickup',
+      preview: 'Your Vitamin D3 2,000 IU prescription is ready for pickup at the SHC pharmacy…',
+      time: 'Apr 7',
+      messages: [
+        {
+          from: 'Campus Pharmacy', time: 'Apr 7, 2025 at 2:45 PM',
+          body: `<p>Hi Ria,</p>
+<p>Your Vitamin D3 2,000 IU prescription is ready for pickup at the Student Health Center pharmacy (room 101).</p>
+<p><strong>Pickup hours:</strong> Mon–Fri, 9 AM – 5 PM. Please bring your student ID.</p>
+<p>If you have any questions about your prescription or need a refill, reply to this message or call us at (831) 459-2500.</p>
+<p class="sig">— SHC Campus Pharmacy</p>`
+        }
+      ]
+    },
+    {
+      id: 't3', from: 'Dr. Marcus Webb', unread: false, sent: false,
+      subject: 'Session Follow-Up Notes',
+      preview: 'Thank you for your session on Feb 14. As we discussed, here are a few…',
+      time: 'Feb 15',
+      messages: [
+        {
+          from: 'Dr. Marcus Webb', time: 'Feb 15, 2025 at 11:05 AM',
+          body: `<p>Hi Ria,</p>
+<p>Thank you for your session yesterday. As we discussed, here are a few mindfulness resources to try between appointments:</p>
+<ul style="margin:10px 0 10px 16px;line-height:1.9">
+  <li><strong>Headspace</strong> — 5-min daily meditation (free for UCSC students)</li>
+  <li><strong>Woebot</strong> — CBT-based chat support</li>
+  <li><strong>CAPS Walk-in Hours</strong> — Tues/Thurs 1–3 PM, no appointment needed</li>
+</ul>
+<p>Our next session is scheduled for March 7 at 2 PM. Feel free to message me if anything comes up before then.</p>
+<p class="sig">— Dr. Marcus Webb, LCSW</p>`
+        }
+      ]
+    },
+    {
+      id: 't4', from: 'Appointments', unread: false, sent: false,
+      subject: 'Reminder: April 15 Appointment',
+      preview: 'This is a reminder that you have a Primary Care appointment with Dr. Sarah Kim…',
+      time: 'Apr 5',
+      messages: [
+        {
+          from: 'Appointments', time: 'Apr 5, 2025 at 9:00 AM',
+          body: `<p>Hi Ria,</p>
+<p>This is a reminder that you have an upcoming appointment:</p>
+<div style="background:var(--blue-50);border-left:3px solid var(--blue-700);padding:12px 16px;border-radius:4px;margin:12px 0;font-size:0.875rem;">
+  <strong>General Check-Up</strong><br/>
+  Dr. Sarah Kim — Primary Care<br/>
+  April 15, 2025 · 10:00 AM<br/>
+  Student Health Center, Room 204
+</div>
+<p>Please complete your <a href="forms.html" style="color:var(--blue-700)">Pre-Visit Form</a> at least 24 hours before your appointment. You can cancel or reschedule up to 4 hours in advance via the <a href="appointments.html" style="color:var(--blue-700)">Appointments</a> page.</p>
+<p class="sig">— UCSC Student Health Appointments</p>`
+        }
+      ]
+    }
+  ];
+
+  // Sent items (composed by Ria)
+  let sentThreads = [
+    {
+      id: 's1', from: 'Dr. Sarah Kim', unread: false, sent: true,
+      subject: 'Question about CBC results',
+      preview: 'Hi Dr. Kim, I had a few questions about my recent CBC panel…',
+      time: 'Apr 4',
+      messages: [
+        {
+          from: 'Ria Singh', time: 'Apr 4, 2025 at 3:18 PM',
+          body: `<p>Hi Dr. Kim,</p>
+<p>I had a few questions about my recent CBC panel. My hemoglobin was listed as 11.8 g/dL — is that something to be concerned about, and should I be making any dietary changes?</p>
+<p>Thank you!</p>
+<p class="sig">— Ria</p>`
+        }
+      ]
+    },
+    {
+      id: 's2', from: 'Appointments', unread: false, sent: true,
+      subject: 'Reschedule request for March 10',
+      preview: 'Hello, I need to reschedule my appointment on March 10 due to a conflict…',
+      time: 'Mar 8',
+      messages: [
+        {
+          from: 'Ria Singh', time: 'Mar 8, 2025 at 10:52 AM',
+          body: `<p>Hello,</p>
+<p>I need to reschedule my appointment on March 10 at 11:00 AM due to a class conflict. Could you please move it to any available afternoon slot the following week?</p>
+<p>Thank you!</p>
+<p class="sig">— Ria Singh (Student ID: 1892734)</p>`
+        }
+      ]
+    }
+  ];
+
+  // ── State ─────────────────────────────────────────────────
+  let currentTab = 'inbox';
+  let activeThreadId = null;
+
+  // ── Helpers ───────────────────────────────────────────────
+  function getContact(name) {
+    return CONTACTS[name] || { initials: name.slice(0,2).toUpperCase(), av: 'av-blue', role: '' };
+  }
+
+  function avatarHTML(name, size = 40) {
+    const c = getContact(name);
+    return `<div class="thread-avatar ${c.av}" style="width:${size}px;height:${size}px;font-size:${size<=36?'0.7rem':'0.75rem'}">${c.initials}</div>`;
+  }
+
+  function escapeHTML(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function unreadCount() {
+    return threads.filter(t => t.unread).length;
+  }
+
+  function updateBadges() {
+    const count = unreadCount();
+    // Inbox tab badge
+    const badge = document.getElementById('inboxBadge');
+    if (badge) {
+      if (count > 0) { badge.textContent = count; badge.style.display = ''; }
+      else { badge.style.display = 'none'; }
+    }
+    // Profile menu & dashboard card are handled by syncMsgBadges() in main.js
+  }
+
+  // ── Render thread list ────────────────────────────────────
+  function renderThreadList(filter = '') {
+    const list = document.getElementById('threadList');
+    const source = currentTab === 'inbox' ? threads : sentThreads;
+    const fl = filter.toLowerCase();
+    const filtered = fl
+      ? source.filter(t =>
+          t.from.toLowerCase().includes(fl) ||
+          t.subject.toLowerCase().includes(fl) ||
+          t.preview.toLowerCase().includes(fl))
+      : source;
+
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="empty-state">No messages found.</div>`;
+      return;
+    }
+
+    list.innerHTML = filtered.map(t => {
+      const c = getContact(t.from);
+      const active = t.id === activeThreadId ? ' active' : '';
+      const unread = t.unread ? ' unread' : '';
+      const dot = t.unread ? `<div class="unread-dot"></div>` : '';
+      return `
+        <div class="thread-item${unread}${active}" id="ti-${t.id}" onclick="openThread('${t.id}')">
+          <div class="thread-avatar ${c.av}">${c.initials}</div>
+          <div class="thread-body">
+            <div class="thread-top">
+              <span class="thread-sender">${t.sent ? 'To ' : ''}${escapeHTML(t.from)}</span>
+              <span class="thread-time">${t.time}</span>
+            </div>
+            <div class="thread-subject">${escapeHTML(t.subject)}</div>
+            <div class="thread-preview">${escapeHTML(t.preview)}</div>
+          </div>
+          ${dot}
+        </div>`;
+    }).join('');
+  }
+
+  // ── Render conversation ───────────────────────────────────
+  function renderConversation(thread) {
+    document.getElementById('viewSubject').textContent = thread.subject;
+    const c = getContact(thread.from);
+    document.getElementById('viewMeta').innerHTML =
+      `${thread.sent ? 'To' : 'From'} <strong>${escapeHTML(thread.from)}</strong>
+       &nbsp;&middot;&nbsp; ${c.role}`;
+
+    const conv = document.getElementById('msgConversation');
+    conv.innerHTML = thread.messages.map(m => {
+      const isMine = m.from === 'Ria Singh';
+      return `
+        <div class="msg-entry${isMine ? ' mine' : ''}">
+          ${!isMine ? avatarHTML(m.from, 36) : avatarHTML('Ria Singh', 36)}
+          <div class="msg-bubble-wrap">
+            <div class="msg-sender-row">
+              <span class="msg-sender-name">${escapeHTML(m.from)}</span>
+              <span>${m.time}</span>
+            </div>
+            <div class="msg-bubble">${m.body}</div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Reply placeholder
+    const replyTA = document.getElementById('replyText');
+    const contact = thread.sent ? thread.from : thread.from;
+    replyTA.placeholder = `Reply to ${contact}…`;
+    replyTA.value = '';
+    document.getElementById('sendSuccess').classList.remove('show');
+
+    // Show/hide reply for sent-only threads (still allow reply)
+    document.getElementById('msgReplyArea').style.display = '';
+
+    // Scroll to bottom of conversation
+    setTimeout(() => { conv.scrollTop = conv.scrollHeight; }, 50);
+  }
+
+  // ── Open thread ───────────────────────────────────────────
+  function openThread(id) {
+    const allThreads = [...threads, ...sentThreads];
+    const thread = allThreads.find(t => t.id === id);
+    if (!thread) return;
+
+    // Mark as read — persist to localStorage and cross-link notifications
+    if (thread.unread) {
+      thread.unread = false;
+      saveReadThread(id);   // from main.js — persists + cross-links notification
+      updateBadges();
+      syncMsgBadges();      // from main.js — updates bell dot + dashboard card
+    }
+
+    activeThreadId = id;
+    renderThreadList(document.getElementById('threadSearch').value);
+
+    document.getElementById('emptyState').style.display = 'none';
+    const view = document.getElementById('msgView');
+    view.style.display = 'flex';
+
+    renderConversation(thread);
+  }
+
+  // ── Tab switching ─────────────────────────────────────────
+  function switchMsgTab(tab, btn) {
+    currentTab = tab;
+    activeThreadId = null;
+
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Reset view
+    document.getElementById('emptyState').style.display = '';
+    document.getElementById('msgView').style.display = 'none';
+
+    renderThreadList(document.getElementById('threadSearch').value);
+  }
+
+  // ── Search ────────────────────────────────────────────────
+  function filterThreads(val) {
+    renderThreadList(val);
+  }
+
+  // ── Reply ─────────────────────────────────────────────────
+  function sendReply() {
+    const text = document.getElementById('replyText').value.trim();
+    if (!text && !replyAttachments.length) return;
+
+    const allThreads = [...threads, ...sentThreads];
+    const thread = allThreads.find(t => t.id === activeThreadId);
+    if (!thread) return;
+
+    const now = new Date();
+    const timeStr = now.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' });
+    const files = replyAttachments.map(f => f.name);
+    const filesHTML = files.length
+      ? `<div class="msg-bubble-files">${files.map(f => `
+          <div class="msg-bubble-file-chip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+            </svg>
+            <span>${f}</span>
+          </div>`).join('')}</div>`
+      : '';
+
+    thread.messages.push({
+      from: 'Ria Singh', time: timeStr,
+      body: (text ? `<p>${escapeHTML(text).replace(/\n/g, '</p><p>')}</p>` : '') + filesHTML
+    });
+
+    thread.preview = text || (files.length ? `📎 ${files[0]}` : '');
+    thread.time = 'Just now';
+
+    renderConversation(thread);
+    renderThreadList(document.getElementById('threadSearch').value);
+
+    document.getElementById('replyText').value = '';
+    replyAttachments = [];
+    document.getElementById('reply-attach-list').innerHTML = '';
+    const suc = document.getElementById('sendSuccess');
+    suc.classList.add('show');
+    setTimeout(() => suc.classList.remove('show'), 3000);
+  }
+
+  function discardReply() {
+    document.getElementById('replyText').value = '';
+    replyAttachments = [];
+    document.getElementById('reply-attach-list').innerHTML = '';
+  }
+
+  // ── Compose ───────────────────────────────────────────────
+  function openCompose(recipientName) {
+    document.getElementById('composeTo').value = recipientName || '';
+    document.getElementById('composeSubject').value = '';
+    document.getElementById('composeBody').value = '';
+    document.getElementById('composeOverlay').classList.add('open');
+    setTimeout(() => {
+      const field = recipientName
+        ? document.getElementById('composeSubject')
+        : document.getElementById('composeTo');
+      field.focus();
+    }, 180);
+  }
+
+  function closeCompose() {
+    document.getElementById('composeOverlay').classList.remove('open');
+    composeAttachments = [];
+    document.getElementById('compose-attach-list').innerHTML = '';
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('composeOverlay')) closeCompose();
+  }
+
+  function sendCompose() {
+    const to      = document.getElementById('composeTo').value.trim();
+    const subject = document.getElementById('composeSubject').value.trim();
+    const body    = document.getElementById('composeBody').value.trim();
+
+    if (!to)      { document.getElementById('composeTo').focus();      return; }
+    if (!subject) { document.getElementById('composeSubject').focus(); return; }
+    if (!body && !composeAttachments.length) { document.getElementById('composeBody').focus(); return; }
+
+    const now     = new Date();
+    const timeStr = now.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' });
+    const newId   = 's' + Date.now();
+    const files   = composeAttachments.map(f => f.name);
+    const filesHTML = files.length
+      ? `<div class="msg-bubble-files">${files.map(f => `
+          <div class="msg-bubble-file-chip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+            </svg>
+            <span>${f}</span>
+          </div>`).join('')}</div>`
+      : '';
+
+    const newThread = {
+      id: newId, from: to, unread: false, sent: true,
+      subject, preview: body || (files.length ? `📎 ${files[0]}` : ''), time: 'Just now',
+      messages: [{
+        from: 'Ria Singh', time: timeStr,
+        body: (body ? `<p>${escapeHTML(body).replace(/\n/g, '</p><p>')}</p>` : '') + filesHTML
+      }]
+    };
+
+    sentThreads.unshift(newThread);
+    closeCompose();
+
+    // Switch to Sent tab and open the new message
+    switchMsgTab('sent', document.getElementById('sentTabBtn'));
+    openThread(newId);
+  }
+
+  // ── File attachments ─────────────────────────────────────
+  let replyAttachments   = [];
+  let composeAttachments = [];
+
+  function renderAttachChips(listId, arr) {
+    const el = document.getElementById(listId);
+    el.innerHTML = arr.map((f, i) => `
+      <div class="attach-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+        </svg>
+        <span>${f.name}</span>
+        <button onclick="removeAttach('${listId}',${i})" title="Remove">×</button>
+      </div>`).join('');
+  }
+
+  function handleReplyAttach(input) {
+    replyAttachments = replyAttachments.concat(Array.from(input.files));
+    renderAttachChips('reply-attach-list', replyAttachments);
+    input.value = '';
+  }
+
+  function handleComposeAttach(input) {
+    composeAttachments = composeAttachments.concat(Array.from(input.files));
+    renderAttachChips('compose-attach-list', composeAttachments);
+    input.value = '';
+  }
+
+  function removeAttach(listId, idx) {
+    if (listId === 'reply-attach-list') {
+      replyAttachments.splice(idx, 1);
+      renderAttachChips('reply-attach-list', replyAttachments);
+    } else {
+      composeAttachments.splice(idx, 1);
+      renderAttachChips('compose-attach-list', composeAttachments);
+    }
+  }
+
+  // ── Keyboard shortcuts ────────────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeCompose();
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      if (document.getElementById('composeOverlay').classList.contains('open')) sendCompose();
+      else if (document.activeElement === document.getElementById('replyText')) sendReply();
+    }
+  });
+
+  // ── Init ──────────────────────────────────────────────────
+  // Apply persisted read state from localStorage so threads stay read across page loads.
+  (function applyPersistedReadState() {
+    const readThreads = getReadThreads(); // from main.js
+    threads.forEach(t => { if (readThreads.includes(t.id)) t.unread = false; });
+  })();
+
+  updateBadges();
+  renderThreadList();
+
+  // Auto-open first unread thread (or first thread if all read)
+  const firstUnread = threads.find(t => t.unread) || threads[0];
+  if (firstUnread) openThread(firstUnread.id);
+  </script>
+</body>
+</html>

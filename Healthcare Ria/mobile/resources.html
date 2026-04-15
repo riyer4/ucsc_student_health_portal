@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Resources — UCSC Student Health</title>
+  <link rel="stylesheet" href="css/mobile.css" />
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══════════════════════════════════════════ -->
+  <header class="m-header">
+    <div class="m-header__brand">
+      <div class="m-header__logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <div>
+        <span class="m-header__title">Resources</span>
+        <span class="m-header__sub">UC Santa Cruz</span>
+      </div>
+    </div>
+    <div class="m-header__actions">
+      <a class="m-desktop-btn" href="../resources.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+        Desktop
+      </a>
+      <a class="m-header__icon-btn" href="notifications.html" aria-label="Notifications">
+        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="m-notif-dot"></span>
+      </a>
+      <div class="m-avatar">RS</div>
+    </div>
+  </header>
+
+  <!-- ═══ SCREEN ════════════════════════════════════════════ -->
+  <main class="m-screen">
+
+    <!-- Crisis Banner — always visible -->
+    <div class="m-section" style="padding-top:16px;" id="crisis">
+      <div class="m-crisis-banner">
+        <h3>🚨 Crisis Resources — Available 24/7</h3>
+        <p>If you or someone you know is in crisis, please reach out immediately. You are not alone.</p>
+        <div class="m-crisis-nums">
+          <a class="m-crisis-num" href="tel:988">
+            <div class="num">988</div>
+            <div class="lbl">Suicide &amp; Crisis Lifeline</div>
+          </a>
+          <a class="m-crisis-num" href="sms:741741">
+            <div class="num">741741</div>
+            <div class="lbl">Crisis Text Line (text HOME)</div>
+          </a>
+          <a class="m-crisis-num" href="tel:18314591889">
+            <div class="num">(831) 459-1889</div>
+            <div class="lbl">CAPS Crisis Line</div>
+          </a>
+          <a class="m-crisis-num" href="tel:911">
+            <div class="num">911</div>
+            <div class="lbl">Emergency Services</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section tabs -->
+    <div style="padding: 0 0 0 0; background:var(--white); border-bottom: 2px solid var(--gray-100);">
+      <div class="m-seg-tabs">
+        <button class="m-seg-tab active" onclick="mResTab(this,'oncampus')">On Campus</button>
+        <button class="m-seg-tab" onclick="mResTab(this,'mental')">Mental Health</button>
+        <button class="m-seg-tab" onclick="mResTab(this,'offcampus')">Off Campus</button>
+        <button class="m-seg-tab" onclick="mResTab(this,'insurance')">Insurance</button>
+      </div>
+    </div>
+
+    <!-- ── Pane: On Campus ───────────────────────────────── -->
+    <div id="mr-oncampus" class="m-res-pane" style="padding-top:14px">
+
+      <!-- Student Health Center -->
+      <div class="m-section">
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:var(--blue-700)"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">Student Health Center</div>
+            <div class="m-resource-tag" style="color:var(--blue-700)">Primary Care</div>
+            <div class="m-resource-desc">Comprehensive medical care including primary care, urgent care, lab services, and travel medicine for enrolled students.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Mon–Fri 8:00 AM – 5:00 PM
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Cowell College, Student Services Building
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              (831) 459-2121
+            </div>
+            <div class="m-resource-actions">
+              <a href="appointments.html" class="m-btn m-btn-primary">Book Appt</a>
+              <a href="tel:18312592121" class="m-btn m-btn-ghost">Call</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAPS -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:var(--green-500)"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">CAPS — Counseling &amp; Psych Services</div>
+            <div class="m-resource-tag" style="color:var(--green-500)">Mental Health</div>
+            <div class="m-resource-desc">Individual counseling, group therapy, crisis intervention, and psychiatric services for UCSC students.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Mon–Fri 8:00 AM – 5:00 PM · Crisis: 24/7
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Cowell College, Suite 101
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              (831) 459-2628 · Crisis: (831) 459-1889
+            </div>
+            <div class="m-resource-actions">
+              <a href="appointments.html" class="m-btn m-btn-primary">Book Appt</a>
+              <a href="tel:18314591889" class="m-btn m-btn-ghost">Crisis Line</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pharmacy -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:var(--orange-500)"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">Campus Pharmacy</div>
+            <div class="m-resource-tag" style="color:var(--orange-500)">Pharmacy</div>
+            <div class="m-resource-desc">On-campus pharmacy filling prescriptions and providing over-the-counter medications. Accepts UC SHIP and most insurance.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Mon–Fri 9:00 AM – 6:00 PM
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Student Health Center, Lower Level
+            </div>
+            <div class="m-resource-actions">
+              <a href="tel:18314592190" class="m-btn m-btn-primary">Call Pharmacy</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sexual Health Clinic -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:#8B5CF6"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">Sexual Health Clinic</div>
+            <div class="m-resource-tag" style="color:#7C3AED">Sexual Health</div>
+            <div class="m-resource-desc">Confidential STI testing and treatment, contraception counseling, and HPV vaccination. Walk-in and by appointment.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Tue &amp; Thu 10:00 AM – 3:00 PM
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Student Health Center, Room 105
+            </div>
+            <div class="m-resource-actions">
+              <a href="appointments.html" class="m-btn m-btn-primary">Book Appt</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disability Resource Center -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:var(--blue-600)"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">Disability Resource Center</div>
+            <div class="m-resource-tag" style="color:var(--blue-600)">Accessibility</div>
+            <div class="m-resource-desc">Academic accommodations, assistive technology, and support services for students with disabilities.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Mon–Fri 8:00 AM – 5:00 PM
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Hahn Student Services, Room 125
+            </div>
+            <div class="m-resource-actions">
+              <a href="tel:18314592089" class="m-btn m-btn-primary">Call DRC</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- end #mr-oncampus -->
+
+    <!-- ── Pane: Mental Health ───────────────────────────── -->
+    <div id="mr-mental" class="m-res-pane" style="display:none;padding-top:14px">
+      <div class="m-section">
+
+        <div class="m-alert m-alert-warning mb-md">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <div>If you are in immediate danger, call <strong>911</strong> or go to your nearest emergency room.</div>
+        </div>
+
+        <!-- CAPS Individual -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:var(--green-500)"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">CAPS Individual Counseling</div>
+            <div class="m-resource-tag" style="color:var(--green-500)">Counseling</div>
+            <div class="m-resource-desc">One-on-one sessions with a licensed therapist. Short-term and ongoing counseling available. First session is free.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Mon–Fri 8:00 AM – 5:00 PM
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              (831) 459-2628
+            </div>
+            <div class="m-resource-actions">
+              <a href="appointments.html" class="m-btn m-btn-primary">Book Session</a>
+              <a href="tel:18314592628" class="m-btn m-btn-ghost">Call</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group Therapy -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:#8B5CF6"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">Group Therapy — Spring 2025</div>
+            <div class="m-resource-tag" style="color:#7C3AED">Group Therapy</div>
+            <div class="m-resource-desc">Facilitated groups for anxiety, depression, grief, identity, and academic stress. Register by April 20.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Various days &amp; times — see CAPS website
+            </div>
+            <div class="m-resource-actions">
+              <a href="tel:18314592628" class="m-btn m-btn-primary">Call to Register</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 988 -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:var(--red-500)"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">988 Suicide &amp; Crisis Lifeline</div>
+            <div class="m-resource-tag" style="color:var(--red-500)">Crisis · 24/7</div>
+            <div class="m-resource-desc">Free, confidential support for people in emotional distress or suicidal crisis. Call or text 988 anytime.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              24 hours a day, 7 days a week
+            </div>
+            <div class="m-resource-actions">
+              <a href="tel:988" class="m-btn m-btn-danger">Call 988</a>
+              <a href="sms:988" class="m-btn m-btn-ghost">Text 988</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crisis Text Line -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:var(--orange-500)"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">Crisis Text Line</div>
+            <div class="m-resource-tag" style="color:var(--orange-500)">Crisis · 24/7</div>
+            <div class="m-resource-desc">Text-based crisis support with a trained volunteer. Text HOME to 741741 from anywhere in the US.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              24 hours a day, 7 days a week
+            </div>
+            <div class="m-resource-actions">
+              <a href="sms:741741?body=HOME" class="m-btn m-btn-primary">Text HOME to 741741</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- end #mr-mental -->
+
+    <!-- ── Pane: Off Campus ──────────────────────────────── -->
+    <div id="mr-offcampus" class="m-res-pane" style="display:none;padding-top:14px">
+      <div class="m-section">
+
+        <!-- Dominican Hospital -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:var(--red-500)"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">Dominican Hospital</div>
+            <div class="m-resource-tag" style="color:var(--red-500)">Emergency Room · 24/7</div>
+            <div class="m-resource-desc">Nearest full-service emergency room to UCSC campus. Level II Trauma Center with 24/7 emergency care.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              1555 Soquel Drive, Santa Cruz — ~3 miles
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Open 24/7
+            </div>
+            <div class="m-resource-actions">
+              <a href="tel:18314621000" class="m-btn m-btn-danger">Call ER</a>
+              <a href="https://maps.google.com/?q=Dominican+Hospital+Santa+Cruz" class="m-btn m-btn-ghost">Directions</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Palo Alto Medical Foundation -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:var(--orange-500)"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">Palo Alto Medical Foundation</div>
+            <div class="m-resource-tag" style="color:var(--orange-500)">Urgent Care</div>
+            <div class="m-resource-desc">Urgent care walk-ins and primary care appointments. Accepts most insurance including UC SHIP.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              2025 Soquel Ave, Santa Cruz — ~2 miles
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Mon–Fri 8:00 AM – 8:00 PM · Sat–Sun 9 AM – 5 PM
+            </div>
+            <div class="m-resource-actions">
+              <a href="tel:18314588000" class="m-btn m-btn-primary">Call Urgent Care</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Walgreens Pharmacy -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:#E11D48"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">Walgreens Pharmacy</div>
+            <div class="m-resource-tag" style="color:#E11D48">Pharmacy · 24/7</div>
+            <div class="m-resource-desc">24-hour pharmacy near campus for prescriptions, vaccinations, and OTC medications.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              1000 41st Ave, Santa Cruz — ~4 miles
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Pharmacy open 24 hours
+            </div>
+            <div class="m-resource-actions">
+              <a href="tel:18314624212" class="m-btn m-btn-primary">Call Walgreens</a>
+              <a href="https://maps.google.com/?q=Walgreens+41st+Ave+Santa+Cruz" class="m-btn m-btn-ghost">Directions</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Planned Parenthood -->
+        <div class="m-resource-card">
+          <div class="m-resource-accent" style="background:#BE185D"></div>
+          <div class="m-resource-body">
+            <div class="m-resource-name">Planned Parenthood</div>
+            <div class="m-resource-tag" style="color:#BE185D">Reproductive Health</div>
+            <div class="m-resource-desc">Reproductive health services including birth control, STI testing, pregnancy testing, and more.</div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              201 Mission St, Santa Cruz — ~5 miles
+            </div>
+            <div class="m-resource-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Mon–Fri 8:30 AM – 4:30 PM
+            </div>
+            <div class="m-resource-actions">
+              <a href="tel:18006632035" class="m-btn m-btn-primary">Call PP</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- end #mr-offcampus -->
+
+    <!-- ── Pane: Insurance ───────────────────────────────── -->
+    <div id="mr-insurance" class="m-res-pane" style="display:none;padding-top:14px">
+      <div class="m-section">
+
+        <!-- UC SHIP Card -->
+        <div class="m-ins-card">
+          <div class="m-ins-card__label">Your Insurance Card — UC SHIP</div>
+          <div class="m-ins-card__name">Ria Singh</div>
+          <div class="m-ins-card__plan">UC Student Health Insurance Plan · Anthem Blue Cross</div>
+          <div class="m-ins-grid">
+            <div>
+              <div class="m-ins-field__lbl">Member ID</div>
+              <div class="m-ins-field__val">UC-2025-1842937</div>
+            </div>
+            <div>
+              <div class="m-ins-field__lbl">Group Number</div>
+              <div class="m-ins-field__val">UC-SHIP-2025</div>
+            </div>
+            <div>
+              <div class="m-ins-field__lbl">Plan Year</div>
+              <div class="m-ins-field__val">2024–2025</div>
+            </div>
+            <div>
+              <div class="m-ins-field__lbl">Status</div>
+              <div class="m-ins-field__val" style="color:var(--gold-400)">● Active</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coverage table -->
+        <div class="m-section-title mb-sm">Coverage Summary</div>
+        <div class="m-card">
+          <div style="padding:0">
+            <table class="m-cov-table" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Service</th>
+                  <th style="text-align:right">Your Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Student Health Center visits</td>
+                  <td>No charge</td>
+                </tr>
+                <tr>
+                  <td>CAPS counseling sessions</td>
+                  <td>No charge</td>
+                </tr>
+                <tr>
+                  <td>Emergency Room visits</td>
+                  <td>$150 copay</td>
+                </tr>
+                <tr>
+                  <td>Urgent care (in-network)</td>
+                  <td>$40 copay</td>
+                </tr>
+                <tr>
+                  <td>Specialist visits</td>
+                  <td>$50 copay</td>
+                </tr>
+                <tr>
+                  <td>Generic prescriptions</td>
+                  <td>$15 copay</td>
+                </tr>
+                <tr>
+                  <td>Brand prescriptions</td>
+                  <td>$40 copay</td>
+                </tr>
+                <tr>
+                  <td>Annual deductible</td>
+                  <td>$200</td>
+                </tr>
+                <tr>
+                  <td>Out-of-pocket max</td>
+                  <td>$3,000/yr</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Medi-Cal -->
+        <div class="mt-lg">
+          <div class="m-section-title mb-sm">Also Available</div>
+          <div class="m-resource-card">
+            <div class="m-resource-accent" style="background:var(--green-500)"></div>
+            <div class="m-resource-body">
+              <div class="m-resource-name">Medi-Cal</div>
+              <div class="m-resource-tag" style="color:var(--green-500)">State Insurance</div>
+              <div class="m-resource-desc">California's Medicaid program. Students from low-income households may qualify. UCSC financial aid office can help with enrollment.</div>
+              <div class="m-resource-detail">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Covered California: (800) 300-1506
+              </div>
+              <div class="m-resource-actions">
+                <a href="tel:18003001506" class="m-btn m-btn-primary">Call Covered CA</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- end #mr-insurance -->
+
+  </main>
+
+  <!-- ═══ BOTTOM NAV ════════════════════════════════════════ -->
+  <nav class="m-bottom-nav">
+    <a class="m-nav-tab" href="index.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      Home
+    </a>
+    <a class="m-nav-tab" href="appointments.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      Appts
+    </a>
+    <a class="m-nav-tab" href="results.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      Results
+    </a>
+    <a class="m-nav-tab" href="messages.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      Messages
+    </a>
+    <a class="m-nav-tab" href="billing.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+        <line x1="1" y1="10" x2="23" y2="10"/>
+      </svg>
+      Billing
+    </a>
+  </nav>
+
+  <script src="js/mobile.js"></script>
+</body>
+</html>

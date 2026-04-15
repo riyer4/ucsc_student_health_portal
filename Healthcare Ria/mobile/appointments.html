@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Appointments — UCSC Student Health</title>
+  <link rel="stylesheet" href="css/mobile.css" />
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══════════════════════════════════════════ -->
+  <header class="m-header">
+    <div class="m-header__brand">
+      <div class="m-header__logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <div>
+        <span class="m-header__title">Appointments</span>
+        <span class="m-header__sub">UC Santa Cruz</span>
+      </div>
+    </div>
+    <div class="m-header__actions">
+      <a class="m-desktop-btn" href="../appointments.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+        Desktop
+      </a>
+      <a class="m-header__icon-btn" href="notifications.html" aria-label="Notifications">
+        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="m-notif-dot"></span>
+      </a>
+      <div class="m-avatar">RS</div>
+    </div>
+  </header>
+
+  <!-- ═══ SCREEN ════════════════════════════════════════════ -->
+  <main class="m-screen">
+
+    <!-- Tab bar -->
+    <div style="padding: 14px 16px 0;">
+      <div class="m-tabs">
+        <div class="m-tab active" onclick="mTab(this,'upcoming')">Upcoming</div>
+        <div class="m-tab" onclick="mTab(this,'book')">Book New</div>
+        <div class="m-tab" onclick="mTab(this,'past')">Past Visits</div>
+      </div>
+    </div>
+
+    <!-- ── Tab: Upcoming ────────────────────────────────── -->
+    <div id="mt-upcoming" class="m-tab-pane active" style="padding-top:14px">
+
+      <div class="m-section">
+        <div class="m-alert m-alert-info">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <div>Reminders are sent 24 hours before your appointment via email and SMS.</div>
+        </div>
+      </div>
+
+      <!-- Apr 15 -->
+      <div class="m-section">
+        <div class="m-section-title mb-sm">Next Up</div>
+        <div class="m-card">
+          <div class="m-appt-card">
+            <div class="m-appt-top">
+              <div class="m-date-chip navy">
+                <span class="mon">APR</span>
+                <span class="day">15</span>
+              </div>
+              <div class="m-appt-info">
+                <div class="m-appt-type">Primary Care Check-up</div>
+                <div class="m-appt-doc">Dr. Sarah Kim · Student Health Center</div>
+              </div>
+              <span class="m-badge m-badge-blue">Confirmed</span>
+            </div>
+            <div class="m-appt-meta mb-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              Tuesday, April 15 · 2:00 PM
+            </div>
+            <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:12px;font-size:0.8125rem;color:var(--gray-600);">
+              <div style="font-weight:600;color:var(--gray-900);margin-bottom:4px;">Location</div>
+              Student Health Center, Cowell, Room 202
+            </div>
+            <div class="m-appt-actions">
+              <button class="m-btn m-btn-ghost" style="flex:1">Reschedule</button>
+              <button class="m-btn m-btn-danger" style="flex:1">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Apr 22 -->
+      <div class="m-section">
+        <div class="m-section-title mb-sm">Also Upcoming</div>
+        <div class="m-card">
+          <div class="m-appt-card">
+            <div class="m-appt-top">
+              <div class="m-date-chip gold">
+                <span class="mon">APR</span>
+                <span class="day">22</span>
+              </div>
+              <div class="m-appt-info">
+                <div class="m-appt-type">CAPS Counseling Session</div>
+                <div class="m-appt-doc">Dr. Marcus Webb · Cowell Health</div>
+              </div>
+              <span class="m-badge m-badge-green">Confirmed</span>
+            </div>
+            <div class="m-appt-meta mb-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              Tuesday, April 22 · 11:30 AM
+            </div>
+            <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:12px;font-size:0.8125rem;color:var(--gray-600);">
+              <div style="font-weight:600;color:var(--gray-900);margin-bottom:4px;">Location</div>
+              CAPS Office, Cowell College, Suite 101
+            </div>
+            <div class="m-appt-actions">
+              <button class="m-btn m-btn-ghost" style="flex:1">Reschedule</button>
+              <button class="m-btn m-btn-danger" style="flex:1">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-section">
+        <button class="m-btn m-btn-gold m-btn-full" onclick="document.querySelector('[onclick*=book]').click()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Book Another Appointment
+        </button>
+      </div>
+    </div><!-- end #mt-upcoming -->
+
+    <!-- ── Tab: Book New ─────────────────────────────────── -->
+    <div id="mt-book" class="m-tab-pane" style="padding-top:8px">
+
+      <!-- Step indicator -->
+      <div class="m-step-indicator">
+        <div class="m-step-grp">
+          <div class="m-step-num active" id="msn1">1</div>
+          <div class="m-step-lbl active" id="msl1">Type</div>
+        </div>
+        <div class="m-step-line" id="msl-line1"></div>
+        <div class="m-step-grp">
+          <div class="m-step-num pending" id="msn2">2</div>
+          <div class="m-step-lbl pending" id="msl2">Provider</div>
+        </div>
+        <div class="m-step-line" id="msl-line2"></div>
+        <div class="m-step-grp">
+          <div class="m-step-num pending" id="msn3">3</div>
+          <div class="m-step-lbl pending" id="msl3">Time</div>
+        </div>
+        <div class="m-step-line" id="msl-line3"></div>
+        <div class="m-step-grp">
+          <div class="m-step-num pending" id="msn4">4</div>
+          <div class="m-step-lbl pending" id="msl4">Confirm</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Appointment Type -->
+      <div id="ms-step1" class="m-step-pane active">
+        <div class="m-section">
+          <div class="m-section-title mb-sm">What type of appointment?</div>
+          <div class="m-provider-grid">
+            <div class="m-provider-card selected" onclick="mSelectCard(this, '.m-provider-grid')">
+              <div class="m-provider-avatar bg-blue" style="background:var(--blue-100);color:var(--blue-700)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </div>
+              <div class="m-provider-name">Primary Care</div>
+              <div class="m-provider-role">General health visit</div>
+            </div>
+            <div class="m-provider-card" onclick="mSelectCard(this, '.m-provider-grid')">
+              <div class="m-provider-avatar" style="background:var(--green-100);color:var(--green-500)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <div class="m-provider-name">Counseling</div>
+              <div class="m-provider-role">CAPS mental health</div>
+            </div>
+            <div class="m-provider-card" onclick="mSelectCard(this, '.m-provider-grid')">
+              <div class="m-provider-avatar" style="background:var(--orange-100);color:var(--orange-500)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+              </div>
+              <div class="m-provider-name">Specialist</div>
+              <div class="m-provider-role">Referral or specialty</div>
+            </div>
+            <div class="m-provider-card" onclick="mSelectCard(this, '.m-provider-grid')">
+              <div class="m-provider-avatar" style="background:var(--gold-100);color:#9A6D00">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <div class="m-provider-name">Wellness</div>
+              <div class="m-provider-role">Preventive care</div>
+            </div>
+          </div>
+          <div class="m-form-group">
+            <label class="m-label">Reason for visit (optional)</label>
+            <textarea class="m-textarea" placeholder="Briefly describe your concern…" rows="3"></textarea>
+          </div>
+          <button class="m-btn m-btn-primary m-btn-full" onclick="mBookStep(2)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Choose Provider -->
+      <div id="ms-step2" class="m-step-pane">
+        <div class="m-section">
+          <div class="m-section-title mb-sm">Choose a provider</div>
+          <div class="m-provider-grid">
+            <div class="m-provider-card selected" onclick="mSelectCard(this, '#ms-step2 .m-provider-grid')">
+              <div class="m-provider-avatar" style="background:#EDE9FE;color:#6D28D9;font-size:1rem">SK</div>
+              <div class="m-provider-name">Dr. Sarah Kim</div>
+              <div class="m-provider-role">Primary Care</div>
+              <div class="m-provider-avail">3 slots available</div>
+            </div>
+            <div class="m-provider-card" onclick="mSelectCard(this, '#ms-step2 .m-provider-grid')">
+              <div class="m-provider-avatar" style="background:#FEF3E2;color:#B85C00;font-size:1rem">JR</div>
+              <div class="m-provider-name">Dr. James R.</div>
+              <div class="m-provider-role">Family Medicine</div>
+              <div class="m-provider-avail">5 slots available</div>
+            </div>
+            <div class="m-provider-card" onclick="mSelectCard(this, '#ms-step2 .m-provider-grid')">
+              <div class="m-provider-avatar" style="background:var(--green-100);color:var(--green-500);font-size:1rem">MC</div>
+              <div class="m-provider-name">Dr. M. Chen</div>
+              <div class="m-provider-role">Internal Medicine</div>
+              <div class="m-provider-avail">2 slots available</div>
+            </div>
+            <div class="m-provider-card" onclick="mSelectCard(this, '#ms-step2 .m-provider-grid')">
+              <div class="m-provider-avatar" style="background:var(--blue-100);color:var(--blue-700);font-size:1rem">LT</div>
+              <div class="m-provider-name">Dr. L. Torres</div>
+              <div class="m-provider-role">General Practice</div>
+              <div class="m-provider-avail">7 slots available</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="m-btn m-btn-ghost" style="flex:1" onclick="mBookStep(1)">Back</button>
+            <button class="m-btn m-btn-primary" style="flex:2" onclick="mBookStep(3)">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Date & Time -->
+      <div id="ms-step3" class="m-step-pane">
+        <div class="m-section">
+          <div class="m-form-group">
+            <label class="m-label">Date</label>
+            <input class="m-input" type="date" value="2025-04-17" />
+          </div>
+          <div class="m-section-title mb-sm">Available Times — Thu, Apr 17</div>
+          <div class="m-time-grid">
+            <div class="m-time-slot unavailable">8:00 AM</div>
+            <div class="m-time-slot" onclick="mSelectTime(this)">9:00 AM</div>
+            <div class="m-time-slot selected" onclick="mSelectTime(this)">10:30 AM</div>
+            <div class="m-time-slot unavailable">11:00 AM</div>
+            <div class="m-time-slot" onclick="mSelectTime(this)">1:00 PM</div>
+            <div class="m-time-slot" onclick="mSelectTime(this)">2:00 PM</div>
+            <div class="m-time-slot unavailable">3:00 PM</div>
+            <div class="m-time-slot" onclick="mSelectTime(this)">3:30 PM</div>
+            <div class="m-time-slot" onclick="mSelectTime(this)">4:00 PM</div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="m-btn m-btn-ghost" style="flex:1" onclick="mBookStep(2)">Back</button>
+            <button class="m-btn m-btn-primary" style="flex:2" onclick="mBookStep(4)">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Confirm -->
+      <div id="ms-step4" class="m-step-pane">
+        <div class="m-section">
+          <div class="m-section-title mb-sm">Confirm your appointment</div>
+          <div class="m-card mb-md">
+            <div style="padding:16px;display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;justify-content:space-between;font-size:0.8125rem;">
+                <span class="text-muted">Type</span>
+                <span class="text-body fw-600">Primary Care</span>
+              </div>
+              <div class="m-divider"></div>
+              <div style="display:flex;justify-content:space-between;font-size:0.8125rem;">
+                <span class="text-muted">Provider</span>
+                <span class="text-body fw-600">Dr. Sarah Kim</span>
+              </div>
+              <div class="m-divider"></div>
+              <div style="display:flex;justify-content:space-between;font-size:0.8125rem;">
+                <span class="text-muted">Date</span>
+                <span class="text-body fw-600">Thu, April 17, 2025</span>
+              </div>
+              <div class="m-divider"></div>
+              <div style="display:flex;justify-content:space-between;font-size:0.8125rem;">
+                <span class="text-muted">Time</span>
+                <span class="text-body fw-600">10:30 AM</span>
+              </div>
+              <div class="m-divider"></div>
+              <div style="display:flex;justify-content:space-between;font-size:0.8125rem;">
+                <span class="text-muted">Location</span>
+                <span class="text-body fw-600">Student Health Center</span>
+              </div>
+            </div>
+          </div>
+          <div class="m-alert m-alert-info mb-md">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            A confirmation email will be sent to <strong>ria@ucsc.edu</strong>. A reminder will be sent 24 hours before your visit.
+          </div>
+          <button class="m-btn m-btn-gold m-btn-full" onclick="mConfirmBooking()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Confirm Appointment
+          </button>
+          <button class="m-btn m-btn-ghost m-btn-full" onclick="mBookStep(3)">Back</button>
+        </div>
+      </div>
+
+    </div><!-- end #mt-book -->
+
+    <!-- ── Tab: Past Visits ──────────────────────────────── -->
+    <div id="mt-past" class="m-tab-pane" style="padding-top:14px">
+      <div class="m-section">
+        <div class="m-section-title mb-sm">Visit History</div>
+        <div class="m-card">
+          <div class="m-past-row">
+            <div class="m-past-date">Mar 20, 2025</div>
+            <div class="m-past-info">
+              <div class="m-past-name">Lab Work & Blood Draw</div>
+              <div class="m-past-doc">Dr. Sarah Kim</div>
+            </div>
+            <span class="m-badge m-badge-gray">Done</span>
+          </div>
+          <div class="m-past-row">
+            <div class="m-past-date">Feb 14, 2025</div>
+            <div class="m-past-info">
+              <div class="m-past-name">CAPS Counseling Session</div>
+              <div class="m-past-doc">Dr. Marcus Webb</div>
+            </div>
+            <span class="m-badge m-badge-gray">Done</span>
+          </div>
+          <div class="m-past-row">
+            <div class="m-past-date">Jan 30, 2025</div>
+            <div class="m-past-info">
+              <div class="m-past-name">Annual Wellness Exam</div>
+              <div class="m-past-doc">Dr. James Rivera</div>
+            </div>
+            <span class="m-badge m-badge-gray">Done</span>
+          </div>
+          <div class="m-past-row">
+            <div class="m-past-date">Dec 12, 2024</div>
+            <div class="m-past-info">
+              <div class="m-past-name">Flu Vaccine</div>
+              <div class="m-past-doc">Nurse Lisa Park</div>
+            </div>
+            <span class="m-badge m-badge-gray">Done</span>
+          </div>
+          <div class="m-past-row">
+            <div class="m-past-date">Oct 3, 2024</div>
+            <div class="m-past-info">
+              <div class="m-past-name">CAPS Initial Assessment</div>
+              <div class="m-past-doc">Dr. Marcus Webb</div>
+            </div>
+            <span class="m-badge m-badge-gray">Done</span>
+          </div>
+          <div class="m-past-row">
+            <div class="m-past-date">Sep 5, 2024</div>
+            <div class="m-past-info">
+              <div class="m-past-name">Urgent Care — Sore Throat</div>
+              <div class="m-past-doc">Dr. L. Torres</div>
+            </div>
+            <span class="m-badge m-badge-gray">Done</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- end #mt-past -->
+
+  </main>
+
+  <!-- ═══ BOTTOM NAV ════════════════════════════════════════ -->
+  <nav class="m-bottom-nav">
+    <a class="m-nav-tab" href="index.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      Home
+    </a>
+    <a class="m-nav-tab active" href="appointments.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      Appts
+    </a>
+    <a class="m-nav-tab" href="results.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      Results
+    </a>
+    <a class="m-nav-tab" href="messages.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      Messages
+    </a>
+    <a class="m-nav-tab" href="billing.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+        <line x1="1" y1="10" x2="23" y2="10"/>
+      </svg>
+      Billing
+    </a>
+  </nav>
+
+  <script src="js/mobile.js"></script>
+</body>
+</html>

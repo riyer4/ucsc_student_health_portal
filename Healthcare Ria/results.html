@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UCSC Student Health — Test Results</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .result-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-100);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+      transition: box-shadow var(--transition);
+    }
+    .result-card:hover { box-shadow: var(--shadow-md); }
+    .result-card__header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      cursor: pointer;
+    }
+    .result-card__title  { flex: 1; font-size: 0.9375rem; font-weight: 600; color: var(--gray-900); }
+    .result-card__meta   { font-size: 0.8125rem; color: var(--gray-500); margin-top: 2px; }
+    .result-card__toggle {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 7px;
+      background: var(--gray-100);
+      color: var(--gray-500);
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .result-card.open .result-card__toggle { background: var(--blue-100); color: var(--blue-800); transform: rotate(180deg); }
+    .result-card__body {
+      display: none;
+      padding: 0 22px 22px;
+      border-top: 1px solid var(--gray-100);
+    }
+    .result-card.open .result-card__body { display: block; }
+
+    .value-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; margin-top: 16px; }
+    .value-table th {
+      text-align: left; font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--gray-500); padding: 8px 10px;
+      border-bottom: 2px solid var(--gray-100);
+    }
+    .value-table td { padding: 10px 10px; border-bottom: 1px solid var(--gray-50); vertical-align: middle; }
+    .value-table tr:last-child td { border-bottom: none; }
+    .value-table td:first-child { font-weight: 500; color: var(--gray-900); }
+    .value-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .value-bar-track { flex: 1; height: 5px; background: var(--gray-100); border-radius: 99px; }
+    .value-bar-fill  { height: 100%; border-radius: 99px; }
+    .in-range  { background: var(--green-500); }
+    .low-range { background: var(--orange-500); }
+    .high-range{ background: var(--red-500); }
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filter-chip {
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      border: 1.5px solid var(--gray-300);
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: all var(--transition);
+      background: var(--white);
+    }
+    .filter-chip:hover  { border-color: var(--blue-600); color: var(--blue-700); }
+    .filter-chip.active { background: var(--blue-800); color: var(--white); border-color: var(--blue-800); }
+
+    .doc-note {
+      background: var(--blue-50);
+      border-left: 3px solid var(--blue-600);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 12px 16px;
+      font-size: 0.875rem;
+      color: var(--blue-800);
+      margin-top: 16px;
+    }
+    .doc-note strong { display: block; margin-bottom: 3px; font-size: 0.8125rem; color: var(--blue-700); }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <div class="topnav__brand">
+      <div class="topnav__logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <div>
+        <span class="topnav__title">Student Health</span>
+        <span class="topnav__sub">UC Santa Cruz</span>
+      </div>
+    </div>
+    <div class="topnav__links">
+      <a class="topnav__link" href="index.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>Dashboard
+      </a>
+      <a class="topnav__link" href="appointments.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>Appointments
+      </a>
+      <a class="topnav__link active" href="results.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>Test Results
+      </a>
+      <a class="topnav__link" href="messages.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+      </a>
+      <a class="topnav__link" href="billing.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Billing
+      </a>
+    </div>
+    <div class="topnav__right">
+      <a class="topnav__mobile-btn" href="mobile/results.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+          <line x1="12" y1="18" x2="12.01" y2="18"/>
+        </svg>
+        Mobile View
+      </a>
+      <div class="topnav__notif">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="topnav__profile" id="topnavProfile">
+        <div class="topnav__avatar" onclick="toggleProfileMenu()" id="profileAvatar">RS</div>
+        <div class="profile-menu" id="profileMenu">
+          <div class="profile-menu__user">
+            <div class="profile-menu__avatar-lg">RS</div>
+            <div><div class="profile-menu__name">Ria Singh</div><div class="profile-menu__email">rsingh@ucsc.edu</div></div>
+          </div>
+          <div class="profile-menu__divider"></div>
+          <a class="profile-menu__item" href="profile.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>My Profile</a>
+          <a class="profile-menu__item" href="insurance.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>Insurance</a>
+          <a class="profile-menu__item" href="records.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>Medical Records</a>
+          <a class="profile-menu__item" href="messages.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>Messages<span class="profile-menu__badge">2</span></a>
+          <a class="profile-menu__item" href="billing.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>Billing</a>
+          <a class="profile-menu__item" href="forms.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>Forms<span class="profile-menu__badge" style="background:var(--orange-500)">1</span></a>
+          <div class="profile-menu__divider"></div>
+          <a class="profile-menu__item profile-menu__item--out" href="#"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <main class="page-content">
+
+      <div class="page-header" style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+        <div>
+          <h1>Test Results</h1>
+          <p>Your lab work, screenings, and diagnostic results.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="messages.html" class="btn btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Message Provider
+          </a>
+          <a href="records.html" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download All Records
+          </a>
+        </div>
+      </div>
+
+      <!-- Summary row -->
+      <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:16px; margin-bottom:32px;">
+        <div class="card card-pad" style="text-align:center;">
+          <div style="font-size:1.625rem; font-weight:700; color:var(--blue-800);">8</div>
+          <div style="font-size:0.8125rem; color:var(--gray-500); margin-top:4px;">Total Results</div>
+        </div>
+        <div class="card card-pad" style="text-align:center;">
+          <div style="font-size:1.625rem; font-weight:700; color:var(--green-500);">5</div>
+          <div style="font-size:0.8125rem; color:var(--gray-500); margin-top:4px;">Normal</div>
+        </div>
+        <div class="card card-pad" style="text-align:center;">
+          <div style="font-size:1.625rem; font-weight:700; color:var(--orange-500);">2</div>
+          <div style="font-size:0.8125rem; color:var(--gray-500); margin-top:4px;">Needs Attention</div>
+        </div>
+        <div class="card card-pad" style="text-align:center;">
+          <div style="font-size:1.625rem; font-weight:700; color:var(--gray-400);">1</div>
+          <div style="font-size:0.8125rem; color:var(--gray-500); margin-top:4px;">Pending</div>
+        </div>
+      </div>
+
+      <div class="main-grid">
+        <div>
+          <!-- Filter bar -->
+          <div class="filter-bar">
+            <div class="search-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" class="form-control" placeholder="Search results…" style="width:200px;">
+            </div>
+            <div class="filter-chip active" onclick="toggleFilter(this)">All</div>
+            <div class="filter-chip" onclick="toggleFilter(this)">Normal</div>
+            <div class="filter-chip" onclick="toggleFilter(this)">Abnormal</div>
+            <div class="filter-chip" onclick="toggleFilter(this)">Pending</div>
+          </div>
+
+          <!-- Pending Result -->
+          <div class="alert alert-warn" style="margin-bottom:16px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span><strong>COVID-19 PCR result is pending</strong> — typically ready within 24–48 hours of collection.</span>
+          </div>
+
+          <!-- Result: CBC -->
+          <div class="result-card open" id="rc1">
+            <div class="result-card__header" onclick="toggleResult('rc1')">
+              <div class="icon-circle icon-circle-green" style="width:40px;height:40px;border-radius:10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div>
+                <div class="result-card__title">Complete Blood Count (CBC)</div>
+                <div class="result-card__meta">April 3, 2025 · Dr. Sarah Kim · Lab Order #L4821</div>
+              </div>
+              <span class="badge badge-green">Normal</span>
+              <div class="result-card__toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </div>
+            </div>
+            <div class="result-card__body">
+              <table class="value-table">
+                <thead>
+                  <tr><th>Test</th><th>Result</th><th>Reference Range</th><th>Status</th><th>Trend</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>WBC (White Blood Cells)</td>
+                    <td><strong>6.8</strong> K/µL</td>
+                    <td>4.5 – 11.0</td>
+                    <td><span class="badge badge-green">Normal</span></td>
+                    <td><div class="value-bar-wrap"><div class="value-bar-track"><div class="value-bar-fill in-range" style="width:42%"></div></div></div></td>
+                  </tr>
+                  <tr>
+                    <td>RBC (Red Blood Cells)</td>
+                    <td><strong>4.6</strong> M/µL</td>
+                    <td>3.8 – 5.2</td>
+                    <td><span class="badge badge-green">Normal</span></td>
+                    <td><div class="value-bar-wrap"><div class="value-bar-track"><div class="value-bar-fill in-range" style="width:57%"></div></div></div></td>
+                  </tr>
+                  <tr>
+                    <td>Hemoglobin</td>
+                    <td><strong>13.8</strong> g/dL</td>
+                    <td>12.0 – 16.0</td>
+                    <td><span class="badge badge-green">Normal</span></td>
+                    <td><div class="value-bar-wrap"><div class="value-bar-track"><div class="value-bar-fill in-range" style="width:47%"></div></div></div></td>
+                  </tr>
+                  <tr>
+                    <td>Hematocrit</td>
+                    <td><strong>41.2</strong> %</td>
+                    <td>36.0 – 46.0</td>
+                    <td><span class="badge badge-green">Normal</span></td>
+                    <td><div class="value-bar-wrap"><div class="value-bar-track"><div class="value-bar-fill in-range" style="width:52%"></div></div></div></td>
+                  </tr>
+                  <tr>
+                    <td>Platelets</td>
+                    <td><strong>245</strong> K/µL</td>
+                    <td>150 – 400</td>
+                    <td><span class="badge badge-green">Normal</span></td>
+                    <td><div class="value-bar-wrap"><div class="value-bar-track"><div class="value-bar-fill in-range" style="width:38%"></div></div></div></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="doc-note">
+                <strong>Provider Note — Dr. Sarah Kim</strong>
+                All CBC values are within normal ranges. No follow-up needed for this panel. Continue current diet and activity levels.
+              </div>
+              <div style="display:flex; gap:10px; margin-top:16px;">
+                <button class="btn btn-ghost btn-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  Download PDF
+                </button>
+                <button class="btn btn-ghost btn-sm">Print</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result: Vitamin D -->
+          <div class="result-card" id="rc2">
+            <div class="result-card__header" onclick="toggleResult('rc2')">
+              <div class="icon-circle icon-circle-orange" style="width:40px;height:40px;border-radius:10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  <circle cx="12" cy="12" r="10"/>
+                </svg>
+              </div>
+              <div>
+                <div class="result-card__title">Vitamin D Level (25-OH)</div>
+                <div class="result-card__meta">April 3, 2025 · Dr. Sarah Kim · Lab Order #L4822</div>
+              </div>
+              <span class="badge badge-orange">Low</span>
+              <div class="result-card__toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </div>
+            </div>
+            <div class="result-card__body">
+              <table class="value-table">
+                <thead>
+                  <tr><th>Test</th><th>Result</th><th>Reference Range</th><th>Status</th><th>Level</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Vitamin D, 25-OH Total</td>
+                    <td><strong>18</strong> ng/mL</td>
+                    <td>30 – 100 ng/mL</td>
+                    <td><span class="badge badge-orange">Low</span></td>
+                    <td><div class="value-bar-wrap"><div class="value-bar-track"><div class="value-bar-fill low-range" style="width:18%"></div></div></div></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="doc-note">
+                <strong>Provider Note — Dr. Sarah Kim</strong>
+                Your Vitamin D level is below the optimal range (30–100 ng/mL). I'm recommending a daily supplement of 2,000 IU Vitamin D3. We'll recheck in 3 months. You can pick up a supplement at the campus pharmacy.
+              </div>
+              <div style="display:flex; gap:10px; margin-top:16px;">
+                <a href="appointments.html" class="btn btn-primary btn-sm">Book Follow-up</a>
+                <button class="btn btn-ghost btn-sm">Download PDF</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result: COVID Pending -->
+          <div class="result-card" id="rc3">
+            <div class="result-card__header" onclick="toggleResult('rc3')">
+              <div class="icon-circle" style="background:var(--gray-100); color:var(--gray-400); width:40px;height:40px;border-radius:10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <div>
+                <div class="result-card__title">COVID-19 PCR Test</div>
+                <div class="result-card__meta">April 8, 2025 · Student Health Lab · Order #L4899</div>
+              </div>
+              <span class="badge badge-gray">Pending</span>
+              <div class="result-card__toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </div>
+            </div>
+            <div class="result-card__body">
+              <div class="empty-state" style="padding:24px 0;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <h3>Result Processing</h3>
+                <p>Your sample was collected on April 8. Results are typically available within 24–48 hours. You'll receive an email notification when ready.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result: Lipid Panel -->
+          <div class="result-card" id="rc4">
+            <div class="result-card__header" onclick="toggleResult('rc4')">
+              <div class="icon-circle icon-circle-green" style="width:40px;height:40px;border-radius:10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div>
+                <div class="result-card__title">Lipid Panel (Cholesterol)</div>
+                <div class="result-card__meta">January 15, 2025 · Dr. Sarah Kim · Lab Order #L4210</div>
+              </div>
+              <span class="badge badge-green">Normal</span>
+              <div class="result-card__toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </div>
+            </div>
+            <div class="result-card__body">
+              <table class="value-table">
+                <thead>
+                  <tr><th>Test</th><th>Result</th><th>Reference Range</th><th>Status</th><th>Level</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Total Cholesterol</td>
+                    <td><strong>172</strong> mg/dL</td>
+                    <td>&lt; 200</td>
+                    <td><span class="badge badge-green">Normal</span></td>
+                    <td><div class="value-bar-wrap"><div class="value-bar-track"><div class="value-bar-fill in-range" style="width:60%"></div></div></div></td>
+                  </tr>
+                  <tr>
+                    <td>LDL (Bad Cholesterol)</td>
+                    <td><strong>98</strong> mg/dL</td>
+                    <td>&lt; 130</td>
+                    <td><span class="badge badge-green">Normal</span></td>
+                    <td><div class="value-bar-wrap"><div class="value-bar-track"><div class="value-bar-fill in-range" style="width:50%"></div></div></div></td>
+                  </tr>
+                  <tr>
+                    <td>HDL (Good Cholesterol)</td>
+                    <td><strong>62</strong> mg/dL</td>
+                    <td>&gt; 40 (F: &gt; 50)</td>
+                    <td><span class="badge badge-green">Normal</span></td>
+                    <td><div class="value-bar-wrap"><div class="value-bar-track"><div class="value-bar-fill in-range" style="width:78%"></div></div></div></td>
+                  </tr>
+                  <tr>
+                    <td>Triglycerides</td>
+                    <td><strong>88</strong> mg/dL</td>
+                    <td>&lt; 150</td>
+                    <td><span class="badge badge-green">Normal</span></td>
+                    <td><div class="value-bar-wrap"><div class="value-bar-track"><div class="value-bar-fill in-range" style="width:35%"></div></div></div></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="doc-note">
+                <strong>Provider Note — Dr. Sarah Kim</strong>
+                Excellent lipid profile — all values within healthy ranges. Maintaining a balanced diet and regular exercise will help keep these numbers strong.
+              </div>
+              <div style="display:flex; gap:10px; margin-top:16px;">
+                <button class="btn btn-ghost btn-sm">Download PDF</button>
+                <button class="btn btn-ghost btn-sm">Print</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Sidebar -->
+        <div style="display:flex; flex-direction:column; gap:20px;">
+
+          <!-- What to expect -->
+          <div class="card card-pad">
+            <h3 style="margin-bottom:14px;">Understanding Your Results</h3>
+            <div style="display:flex; flex-direction:column; gap:10px; font-size:0.875rem;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span class="badge badge-green" style="min-width:70px; justify-content:center;">Normal</span>
+                <span style="color:var(--gray-500);">Result is within expected range</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span class="badge badge-orange" style="min-width:70px; justify-content:center;">Low / High</span>
+                <span style="color:var(--gray-500);">Slightly outside range, review note</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span class="badge badge-red" style="min-width:70px; justify-content:center;">Abnormal</span>
+                <span style="color:var(--gray-500);">Follow-up with provider needed</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span class="badge badge-gray" style="min-width:70px; justify-content:center;">Pending</span>
+                <span style="color:var(--gray-500);">Lab is still processing</span>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <p style="font-size:0.8125rem; line-height:1.6;">Have questions about your results? Your provider has left notes in each result. You can also message the SHC or book a follow-up.</p>
+            <a href="appointments.html" class="btn btn-primary btn-sm" style="margin-top:14px; display:inline-flex;">Book Follow-up</a>
+          </div>
+
+          <!-- Immunization Record -->
+          <div class="card card-pad">
+            <div class="card-header">
+              <span class="card-title">Immunization Record</span>
+              <span class="badge badge-green">Complete</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; font-size:0.875rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:var(--gray-700); font-weight:500;">MMR (Measles)</span>
+                <span class="badge badge-green">2023</span>
+              </div>
+              <div class="divider" style="margin:2px 0;"></div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:var(--gray-700); font-weight:500;">Tdap (Tetanus)</span>
+                <span class="badge badge-green">2022</span>
+              </div>
+              <div class="divider" style="margin:2px 0;"></div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:var(--gray-700); font-weight:500;">Hepatitis B</span>
+                <span class="badge badge-green">3 doses</span>
+              </div>
+              <div class="divider" style="margin:2px 0;"></div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:var(--gray-700); font-weight:500;">Flu Vaccine</span>
+                <span class="badge badge-green">Oct 2024</span>
+              </div>
+              <div class="divider" style="margin:2px 0;"></div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:var(--gray-700); font-weight:500;">Meningococcal</span>
+                <span class="badge badge-green">2023</span>
+              </div>
+              <div class="divider" style="margin:2px 0;"></div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:var(--gray-700); font-weight:500;">COVID-19</span>
+                <span class="badge badge-green">Updated</span>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" style="margin-top:14px; width:100%; justify-content:center;">
+              Download Immunization Records
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="footer">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <div style="width:28px;height:28px;background:var(--gold-500);border-radius:7px;display:flex;align-items:center;justify-content:center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="var(--blue-900)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <span class="footer__brand-name">UCSC Student Health</span>
+        </div>
+        <div class="footer__links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Accessibility</a>
+          <a href="#">Contact Us</a>
+          <a href="#">Help</a>
+        </div>
+        <span class="footer__copy">© 2025 UC Santa Cruz · Student Health Center</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

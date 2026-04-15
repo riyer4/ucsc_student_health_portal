@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UCSC Student Health — Resources</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .section-tab-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 28px;
+      border-bottom: 2px solid var(--gray-100);
+      padding-bottom: 0;
+    }
+    .section-tab {
+      padding: 10px 20px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: var(--font);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all var(--transition);
+    }
+    .section-tab:hover { color: var(--gray-700); }
+    .section-tab.active { color: var(--blue-800); border-bottom-color: var(--blue-800); }
+
+    .resource-full-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+    .resource-full-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .resource-full-card__accent {
+      height: 5px;
+      width: 100%;
+    }
+    .resource-full-card__body { padding: 22px; }
+    .resource-full-card__name { font-size: 1rem; font-weight: 700; color: var(--gray-900); margin-bottom: 2px; }
+    .resource-full-card__tag  { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+    .resource-full-card__desc { font-size: 0.875rem; color: var(--gray-500); line-height: 1.6; margin-bottom: 16px; }
+    .resource-detail-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+    .resource-detail { display: flex; align-items: flex-start; gap: 8px; font-size: 0.8125rem; color: var(--gray-600); }
+    .resource-detail svg { width: 14px; height: 14px; color: var(--gray-400); flex-shrink: 0; margin-top: 1px; }
+    .resource-full-card__actions { display: flex; gap: 8px; }
+
+    .off-campus-section { margin-top: 40px; }
+    .crisis-banner {
+      background: linear-gradient(135deg, #7c1d1d, var(--red-500));
+      border-radius: var(--radius-xl);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .crisis-banner__text h2 { color: var(--white); font-size: 1.25rem; }
+    .crisis-banner__text p  { color: rgba(255,255,255,0.75); font-size:0.875rem; margin-top:6px; }
+    .crisis-numbers { display: flex; gap: 12px; flex-wrap: wrap; }
+    .crisis-num {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--radius-md);
+      padding: 12px 18px;
+      color: var(--white);
+      text-align: center;
+    }
+    .crisis-num .num  { font-size: 1rem; font-weight: 700; }
+    .crisis-num .lbl  { font-size: 0.7rem; opacity: 0.7; margin-top: 2px; font-weight: 500; }
+
+    .category-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <div class="topnav__brand">
+      <div class="topnav__logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <div>
+        <span class="topnav__title">Student Health</span>
+        <span class="topnav__sub">UC Santa Cruz</span>
+      </div>
+    </div>
+    <div class="topnav__links">
+      <a class="topnav__link" href="index.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>Dashboard
+      </a>
+      <a class="topnav__link" href="appointments.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>Appointments
+      </a>
+      <a class="topnav__link" href="results.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>Test Results
+      </a>
+      <a class="topnav__link" href="messages.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+      </a>
+      <a class="topnav__link" href="billing.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Billing
+      </a>
+    </div>
+    <div class="topnav__right">
+      <a class="topnav__mobile-btn" href="mobile/resources.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+          <line x1="12" y1="18" x2="12.01" y2="18"/>
+        </svg>
+        Mobile View
+      </a>
+      <div class="topnav__notif">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="topnav__profile" id="topnavProfile">
+        <div class="topnav__avatar" onclick="toggleProfileMenu()" id="profileAvatar">RS</div>
+        <div class="profile-menu" id="profileMenu">
+          <div class="profile-menu__user">
+            <div class="profile-menu__avatar-lg">RS</div>
+            <div><div class="profile-menu__name">Ria Singh</div><div class="profile-menu__email">rsingh@ucsc.edu</div></div>
+          </div>
+          <div class="profile-menu__divider"></div>
+          <a class="profile-menu__item" href="profile.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>My Profile</a>
+          <a class="profile-menu__item" href="insurance.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>Insurance</a>
+          <a class="profile-menu__item" href="records.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>Medical Records</a>
+          <a class="profile-menu__item" href="messages.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>Messages<span class="profile-menu__badge">2</span></a>
+          <a class="profile-menu__item" href="billing.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>Billing</a>
+          <a class="profile-menu__item" href="forms.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>Forms<span class="profile-menu__badge" style="background:var(--orange-500)">1</span></a>
+          <div class="profile-menu__divider"></div>
+          <a class="profile-menu__item profile-menu__item--out" href="#"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <main class="page-content">
+
+      <div class="page-header" style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+        <div>
+          <h1>Health Resources</h1>
+          <p>On-campus and off-campus healthcare options for UCSC students.</p>
+        </div>
+        <div class="search-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" class="form-control" placeholder="Search resources…" style="width:240px;">
+        </div>
+      </div>
+
+      <!-- Crisis Banner -->
+      <div id="urgent" class="crisis-banner">
+        <div class="crisis-banner__text">
+          <h2>Need Immediate Help?</h2>
+          <p>For mental health crises, medical emergencies, or urgent support — these lines are available 24/7.</p>
+        </div>
+        <div class="crisis-numbers">
+          <a href="tel:911" class="crisis-num">
+            <div class="num">911</div>
+            <div class="lbl">Emergency</div>
+          </a>
+          <a href="tel:18314591889" class="crisis-num">
+            <div class="num">(831) 459-1889</div>
+            <div class="lbl">CAPS Crisis</div>
+          </a>
+          <a href="tel:988" class="crisis-num">
+            <div class="num">988</div>
+            <div class="lbl">Suicide &amp; Crisis Lifeline</div>
+          </a>
+          <a href="tel:18314592100" class="crisis-num">
+            <div class="num">(831) 459-2100</div>
+            <div class="lbl">UCSC Police</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section Tabs -->
+      <div class="section-tab-bar">
+        <button class="section-tab active" onclick="switchResTab(this,'on-campus')">On Campus</button>
+        <button class="section-tab" onclick="switchResTab(this,'mental-health')">Mental Health</button>
+        <button class="section-tab" onclick="switchResTab(this,'off-campus')">Off Campus</button>
+        <button class="section-tab" onclick="switchResTab(this,'insurance')">Insurance</button>
+      </div>
+
+      <!-- ON CAMPUS -->
+      <div class="res-pane" id="res-on-campus">
+        <div style="display:grid; grid-template-columns: repeat(2,1fr); gap:20px;">
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background: linear-gradient(90deg, var(--blue-800), var(--blue-600));"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-blue" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">Student Health Center (SHC)</div>
+                  <div class="resource-full-card__tag" style="color:var(--blue-700);">Primary Care · On Campus</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">
+                The SHC provides comprehensive outpatient medical care including primary care, urgent care, lab services, pharmacy, and immunizations for UCSC students.
+              </div>
+              <div class="resource-detail-list">
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Mon–Fri: 8 AM – 5 PM · Sat: 10 AM – 2 PM
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Cowell College, Student Health Services Building
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  (831) 459-2121
+                </div>
+              </div>
+              <div class="resource-full-card__actions">
+                <a href="appointments.html" class="btn btn-primary btn-sm">Book Appointment</a>
+                <a href="tel:18314592121" class="btn btn-outline btn-sm">Call</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background: linear-gradient(90deg, var(--gold-500), #f5b800);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-gold" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">CAPS — Counseling &amp; Psych Services</div>
+                  <div class="resource-full-card__tag" style="color:#a07000;">Mental Health · On Campus</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">
+                CAPS offers individual counseling, group therapy, crisis intervention, and psychiatric services. All services are confidential and included with student health fees.
+              </div>
+              <div class="resource-detail-list">
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Mon–Fri: 8 AM – 5 PM · Crisis: 24/7
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Cowell Health Services · Room 301
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  (831) 459-2628 · Crisis: (831) 459-1889
+                </div>
+              </div>
+              <div class="resource-full-card__actions">
+                <a href="appointments.html" class="btn btn-gold btn-sm">Book Session</a>
+                <a href="tel:18314592628" class="btn btn-outline btn-sm">Call</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background: linear-gradient(90deg, var(--green-500), #1a9e6a);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-green" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">SHC Pharmacy</div>
+                  <div class="resource-full-card__tag" style="color:var(--green-500);">Pharmacy · On Campus</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">
+                Full-service pharmacy offering prescription fills, over-the-counter medications, contraceptives, and PrEP. Accepts most insurance plans including UC SHIP.
+              </div>
+              <div class="resource-detail-list">
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Mon–Fri: 8:30 AM – 6 PM · Sat: 10 AM – 2 PM
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Student Health Center, Ground Floor
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  (831) 459-4228
+                </div>
+              </div>
+              <div class="resource-full-card__actions">
+                <button class="btn btn-primary btn-sm">Refill Prescription</button>
+                <a href="tel:18314594228" class="btn btn-outline btn-sm">Call</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background: linear-gradient(90deg, var(--orange-500), #e8901a);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-orange" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">Sexual Health Clinic</div>
+                  <div class="resource-full-card__tag" style="color:var(--orange-500);">Sexual Health · On Campus</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">
+                Confidential STI/STD testing and treatment, contraception counseling, emergency contraception, PrEP/PEP, and pregnancy testing. No appointment needed for some services.
+              </div>
+              <div class="resource-detail-list">
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Tue &amp; Thu: 10 AM – 4 PM (walk-in)
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Student Health Center, Room 110
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  (831) 459-2121 ext. 3
+                </div>
+              </div>
+              <div class="resource-full-card__actions">
+                <a href="appointments.html" class="btn btn-primary btn-sm">Book Appointment</a>
+                <button class="btn btn-outline btn-sm">Walk-in Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background: linear-gradient(90deg, #7c3aed, #9f5aff);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle" style="background:#f3e8ff; color:#7c3aed; width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 8v4M12 16h.01"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">Wellness &amp; Health Promotion</div>
+                  <div class="resource-full-card__tag" style="color:#7c3aed;">Wellness · On Campus</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">
+                Offers peer health education, wellness workshops, stress management, nutrition counseling, sleep health programs, and substance use support — all free to students.
+              </div>
+              <div class="resource-detail-list">
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Mon–Fri: 9 AM – 5 PM
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Student Health Center, Room 221
+                </div>
+              </div>
+              <div class="resource-full-card__actions">
+                <button class="btn btn-primary btn-sm" style="background:#7c3aed;">View Programs</button>
+                <a href="appointments.html" class="btn btn-outline btn-sm">Book Consult</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background: linear-gradient(90deg, #0891b2, #06b6d4);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle" style="background:#e0f7fa; color:#0891b2; width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">Disability Resource Center</div>
+                  <div class="resource-full-card__tag" style="color:#0891b2;">Accessibility · On Campus</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">
+                Provides academic accommodations, assistive technology, and support services for students with disabilities, chronic illness, or mental health conditions.
+              </div>
+              <div class="resource-detail-list">
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Mon–Fri: 8 AM – 5 PM
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Hahn Student Services · Room 205
+                </div>
+                <div class="resource-detail">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  (831) 459-2089
+                </div>
+              </div>
+              <div class="resource-full-card__actions">
+                <button class="btn btn-primary btn-sm" style="background:#0891b2;">Request Accommodations</button>
+                <a href="tel:18314592089" class="btn btn-outline btn-sm">Call</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- MENTAL HEALTH -->
+      <div class="res-pane" id="res-mental-health" style="display:none;">
+        <div class="alert alert-info" style="margin-bottom:24px;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>All mental health services at UCSC are <strong>confidential</strong>. You can seek help without it appearing on your academic or disciplinary record.</span>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(2,1fr); gap:20px;">
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background:linear-gradient(90deg,var(--gold-500),#f5b800);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-gold" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">CAPS Individual Counseling</div>
+                  <div class="resource-full-card__tag" style="color:#a07000;">UCSC · Free for Students</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">One-on-one confidential sessions with licensed therapists. Covers anxiety, depression, grief, academic stress, relationships, and more.</div>
+              <div class="resource-detail-list">
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>(831) 459-2628</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Mon–Fri 8 AM – 5 PM</div>
+              </div>
+              <div class="resource-full-card__actions">
+                <a href="appointments.html" class="btn btn-gold btn-sm">Book Appointment</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background:linear-gradient(90deg,#7c3aed,#9f5aff);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle" style="background:#f3e8ff;color:#7c3aed;width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">CAPS Group Therapy</div>
+                  <div class="resource-full-card__tag" style="color:#7c3aed;">UCSC · Free for Students</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">Themed support groups covering anxiety, grief, LGBTQ+ identity, cultural adjustment, and more. Groups run each quarter — register early.</div>
+              <div class="resource-detail-list">
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>(831) 459-2628</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Registration opens each quarter</div>
+              </div>
+              <div class="resource-full-card__actions">
+                <button class="btn btn-primary btn-sm" style="background:#7c3aed;">See Current Groups</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background:linear-gradient(90deg,var(--red-500),#ff7070);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-red" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">988 Suicide &amp; Crisis Lifeline</div>
+                  <div class="resource-full-card__tag" style="color:var(--red-500);">National · 24/7 Free</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">Call or text 988 anytime for free, confidential crisis support. Available 24/7 via phone, text, and chat. No insurance required.</div>
+              <div class="resource-detail-list">
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Available 24 hours · 7 days a week</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call or Text: 988</div>
+              </div>
+              <div class="resource-full-card__actions">
+                <a href="tel:988" class="btn btn-sm" style="background:var(--red-500);color:var(--white);">Call 988 Now</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background:linear-gradient(90deg,var(--green-500),#1a9e6a);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-green" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">Crisis Text Line</div>
+                  <div class="resource-full-card__tag" style="color:var(--green-500);">National · 24/7 Free</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">Text-based crisis support for students who prefer messaging over calling. Confidential, judgment-free, and completely free.</div>
+              <div class="resource-detail-list">
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Available 24 hours · 7 days a week</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Text HOME to 741741</div>
+              </div>
+              <div class="resource-full-card__actions">
+                <button class="btn btn-primary btn-sm" style="background:var(--green-500);">How to Text</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- OFF CAMPUS -->
+      <div class="res-pane" id="res-off-campus" style="display:none;">
+        <div style="display:grid; grid-template-columns: repeat(2,1fr); gap:20px;">
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background:linear-gradient(90deg,var(--red-500),#ff7070);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-red" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">Dominican Hospital</div>
+                  <div class="resource-full-card__tag" style="color:var(--red-500);">Emergency · 3.1 miles</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">Full-service hospital with 24/7 emergency department. Nearest major hospital to UCSC campus for serious medical emergencies.</div>
+              <div class="resource-detail-list">
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>1555 Soquel Dr, Santa Cruz, CA</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>(831) 462-7700</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Emergency: 24/7</div>
+              </div>
+              <div class="resource-full-card__actions">
+                <a href="tel:18314627700" class="btn btn-sm" style="background:var(--red-500);color:var(--white);">Call ER</a>
+                <button class="btn btn-outline btn-sm">Directions</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background:linear-gradient(90deg,var(--orange-500),#e8901a);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-orange" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">Palo Alto Medical Foundation</div>
+                  <div class="resource-full-card__tag" style="color:var(--orange-500);">Urgent Care · 2.8 miles</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">Urgent care clinic treating non-emergency conditions like infections, injuries, rashes, and illnesses. Shorter wait times than an ER.</div>
+              <div class="resource-detail-list">
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>2025 Soquel Ave, Santa Cruz, CA</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>(831) 476-5535</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Mon–Fri: 8 AM – 8 PM · Wknd: 9 AM – 5 PM</div>
+              </div>
+              <div class="resource-full-card__actions">
+                <a href="tel:18314765535" class="btn btn-primary btn-sm">Call</a>
+                <button class="btn btn-outline btn-sm">Directions</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background:linear-gradient(90deg,var(--blue-800),var(--blue-600));"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-blue" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">Walgreens Pharmacy</div>
+                  <div class="resource-full-card__tag" style="color:var(--blue-700);">Pharmacy · 1.5 miles</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">Full-service pharmacy with extended hours. Can fill most SHC prescriptions and carries over-the-counter medications and health supplies.</div>
+              <div class="resource-detail-list">
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>710 Front St, Santa Cruz, CA</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>(831) 423-1721</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Daily: 8 AM – 10 PM</div>
+              </div>
+              <div class="resource-full-card__actions">
+                <a href="tel:18314231721" class="btn btn-primary btn-sm">Call</a>
+                <button class="btn btn-outline btn-sm">Directions</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="resource-full-card">
+            <div class="resource-full-card__accent" style="background:linear-gradient(90deg,var(--green-500),#1a9e6a);"></div>
+            <div class="resource-full-card__body">
+              <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                <div class="icon-circle icon-circle-green" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+                </div>
+                <div>
+                  <div class="resource-full-card__name">Planned Parenthood Santa Cruz</div>
+                  <div class="resource-full-card__tag" style="color:var(--green-500);">Sexual Health · 3.5 miles</div>
+                </div>
+              </div>
+              <div class="resource-full-card__desc">Comprehensive reproductive and sexual health services. Accepts UC SHIP. Offers STI testing, contraception, abortion care, and gender-affirming hormone therapy.</div>
+              <div class="resource-detail-list">
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>1119 Pacific Ave, Santa Cruz, CA</div>
+                <div class="resource-detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>1-800-230-7526</div>
+              </div>
+              <div class="resource-full-card__actions">
+                <a href="tel:18002307526" class="btn btn-primary btn-sm">Call</a>
+                <button class="btn btn-outline btn-sm">Directions</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- INSURANCE -->
+      <div class="res-pane" id="res-insurance" style="display:none;">
+        <div class="main-grid">
+          <div>
+            <div class="card card-pad" style="margin-bottom:20px;">
+              <div class="card-header">
+                <span class="card-title">UC Student Health Insurance Plan (UC SHIP)</span>
+                <div style="display:flex;gap:8px;align-items:center;">
+                  <span class="badge badge-green">Active</span>
+                  <a href="insurance.html" class="btn btn-sm btn-primary">View My Insurance Card →</a>
+                </div>
+              </div>
+              <div style="font-size:0.875rem; color:var(--gray-500); line-height:1.7; margin-bottom:16px;">
+                All registered UCSC students are automatically enrolled in UC SHIP unless they waive it with approved alternative coverage. UC SHIP provides comprehensive medical, dental, vision, and mental health coverage.
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+                <div style="background:var(--gray-50);border-radius:var(--radius-md);padding:14px;">
+                  <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--gray-500);margin-bottom:4px;">Member ID</div>
+                  <div style="font-size:0.9375rem;font-weight:700;color:var(--gray-900);">UC-2025-1842937</div>
+                </div>
+                <div style="background:var(--gray-50);border-radius:var(--radius-md);padding:14px;">
+                  <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--gray-500);margin-bottom:4px;">Group Number</div>
+                  <div style="font-size:0.9375rem;font-weight:700;color:var(--gray-900);">700234</div>
+                </div>
+                <div style="background:var(--gray-50);border-radius:var(--radius-md);padding:14px;">
+                  <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--gray-500);margin-bottom:4px;">Coverage Period</div>
+                  <div style="font-size:0.9375rem;font-weight:700;color:var(--gray-900);">Sept 2024 – Aug 2025</div>
+                </div>
+                <div style="background:var(--gray-50);border-radius:var(--radius-md);padding:14px;">
+                  <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--gray-500);margin-bottom:4px;">Carrier</div>
+                  <div style="font-size:0.9375rem;font-weight:700;color:var(--gray-900);">Anthem Blue Cross</div>
+                </div>
+              </div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-primary">View Benefits Summary</button>
+                <button class="btn btn-ghost">Download Insurance Card</button>
+              </div>
+            </div>
+
+            <div class="card card-pad">
+              <h3 style="margin-bottom:16px;">Coverage Overview</h3>
+              <table style="width:100%; border-collapse:collapse; font-size:0.875rem;">
+                <thead>
+                  <tr style="border-bottom:2px solid var(--gray-100);">
+                    <th style="text-align:left; padding:8px 10px; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--gray-500); font-weight:600;">Service</th>
+                    <th style="text-align:left; padding:8px 10px; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--gray-500); font-weight:600;">In-Network</th>
+                    <th style="text-align:left; padding:8px 10px; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--gray-500); font-weight:600;">Out-of-Network</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid var(--gray-50);">
+                    <td style="padding:10px;">SHC Visits</td>
+                    <td style="padding:10px; color:var(--green-500); font-weight:600;">$0 copay</td>
+                    <td style="padding:10px; color:var(--gray-500);">After deductible</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--gray-50);">
+                    <td style="padding:10px;">Urgent Care</td>
+                    <td style="padding:10px; color:var(--blue-700); font-weight:600;">$25 copay</td>
+                    <td style="padding:10px; color:var(--gray-500);">50% after deductible</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--gray-50);">
+                    <td style="padding:10px;">Emergency Room</td>
+                    <td style="padding:10px; color:var(--blue-700); font-weight:600;">$100 copay</td>
+                    <td style="padding:10px; color:var(--gray-500);">$100 copay</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--gray-50);">
+                    <td style="padding:10px;">Mental Health (CAPS)</td>
+                    <td style="padding:10px; color:var(--green-500); font-weight:600;">$0 copay</td>
+                    <td style="padding:10px; color:var(--gray-500);">After deductible</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--gray-50);">
+                    <td style="padding:10px;">Lab Tests</td>
+                    <td style="padding:10px; color:var(--green-500); font-weight:600;">$0 (at SHC)</td>
+                    <td style="padding:10px; color:var(--gray-500);">20% after deductible</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px;">Pharmacy</td>
+                    <td style="padding:10px; color:var(--blue-700); font-weight:600;">$5 – $25 copay</td>
+                    <td style="padding:10px; color:var(--gray-500);">Higher out-of-pocket</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="card card-pad">
+              <h3 style="margin-bottom:14px;">Need Insurance Help?</h3>
+              <p style="font-size:0.875rem; line-height:1.7; margin-bottom:16px;">Our Student Health Insurance Advisors can help you understand your coverage, file claims, or find in-network providers.</p>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <a href="tel:18314592121" class="btn btn-primary btn-sm" style="justify-content:flex-start;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.55 5a2 2 0 0 1 1.995-2H6.5a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  (831) 459-2121
+                </a>
+                <button class="btn btn-ghost btn-sm" style="justify-content:flex-start;">
+                  Waive UC SHIP
+                </button>
+              </div>
+            </div>
+            <div class="card card-pad">
+              <h3 style="margin-bottom:14px;">Medi-Cal Eligible?</h3>
+              <p style="font-size:0.875rem; line-height:1.7; margin-bottom:14px;">California students may qualify for Medi-Cal, which can coordinate with or replace UC SHIP. Income-based eligibility.</p>
+              <button class="btn btn-outline btn-sm" style="width:100%; justify-content:center;">Check Eligibility</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="footer">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <div style="width:28px;height:28px;background:var(--gold-500);border-radius:7px;display:flex;align-items:center;justify-content:center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="var(--blue-900)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <span class="footer__brand-name">UCSC Student Health</span>
+        </div>
+        <div class="footer__links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Accessibility</a>
+          <a href="#">Contact Us</a>
+          <a href="#">Help</a>
+        </div>
+        <span class="footer__copy">© 2025 UC Santa Cruz · Student Health Center</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
