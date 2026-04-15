@@ -328,11 +328,11 @@
         <span class="notif-dot"></span>
       </div>
       <div class="topnav__profile" id="topnavProfile">
-        <div class="topnav__avatar" onclick="toggleProfileMenu()" id="profileAvatar">RS</div>
+        <div class="topnav__avatar" onclick="toggleProfileMenu()" id="profileAvatar">AS</div>
         <div class="profile-menu" id="profileMenu">
           <div class="profile-menu__user">
-            <div class="profile-menu__avatar-lg">RS</div>
-            <div><div class="profile-menu__name">Ria Singh</div><div class="profile-menu__email">rsingh@ucsc.edu</div></div>
+            <div class="profile-menu__avatar-lg">AS</div>
+            <div><div class="profile-menu__name">Alex Student</div><div class="profile-menu__email">astudent@ucsc.edu</div></div>
           </div>
           <div class="profile-menu__divider"></div>
           <a class="profile-menu__item" href="profile.html"><div class="profile-menu__item-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>My Profile</a>
@@ -600,7 +600,7 @@
       time: 'Apr 4',
       messages: [
         {
-          from: 'Ria Singh', time: 'Apr 4, 2025 at 3:18 PM',
+          from: 'Alex Student', time: 'Apr 4, 2025 at 3:18 PM',
           body: `<p>Hi Dr. Kim,</p>
 <p>I had a few questions about my recent CBC panel. My hemoglobin was listed as 11.8 g/dL — is that something to be concerned about, and should I be making any dietary changes?</p>
 <p>Thank you!</p>
@@ -615,11 +615,11 @@
       time: 'Mar 8',
       messages: [
         {
-          from: 'Ria Singh', time: 'Mar 8, 2025 at 10:52 AM',
+          from: 'Alex Student', time: 'Mar 8, 2025 at 10:52 AM',
           body: `<p>Hello,</p>
 <p>I need to reschedule my appointment on March 10 at 11:00 AM due to a class conflict. Could you please move it to any available afternoon slot the following week?</p>
 <p>Thank you!</p>
-<p class="sig">— Ria Singh (Student ID: 1892734)</p>`
+<p class="sig">— Alex Student (Student ID: 1892734)</p>`
         }
       ]
     }
@@ -706,10 +706,10 @@
 
     const conv = document.getElementById('msgConversation');
     conv.innerHTML = thread.messages.map(m => {
-      const isMine = m.from === 'Ria Singh';
+      const isMine = m.from === 'Alex Student';
       return `
         <div class="msg-entry${isMine ? ' mine' : ''}">
-          ${!isMine ? avatarHTML(m.from, 36) : avatarHTML('Ria Singh', 36)}
+          ${!isMine ? avatarHTML(m.from, 36) : avatarHTML('Alex Student', 36)}
           <div class="msg-bubble-wrap">
             <div class="msg-sender-row">
               <span class="msg-sender-name">${escapeHTML(m.from)}</span>
@@ -802,7 +802,7 @@
       : '';
 
     thread.messages.push({
-      from: 'Ria Singh', time: timeStr,
+      from: 'Alex Student', time: timeStr,
       body: (text ? `<p>${escapeHTML(text).replace(/\n/g, '</p><p>')}</p>` : '') + filesHTML
     });
 
@@ -878,7 +878,7 @@
       id: newId, from: to, unread: false, sent: true,
       subject, preview: body || (files.length ? `📎 ${files[0]}` : ''), time: 'Just now',
       messages: [{
-        from: 'Ria Singh', time: timeStr,
+        from: 'Alex Student', time: timeStr,
         body: (body ? `<p>${escapeHTML(body).replace(/\n/g, '</p><p>')}</p>` : '') + filesHTML
       }]
     };
